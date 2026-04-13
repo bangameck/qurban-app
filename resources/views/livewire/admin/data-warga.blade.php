@@ -57,7 +57,7 @@
                             <td class="px-6 py-3 font-semibold text-primary-700">{{ $warga->nama }}</td>
                             <td class="px-6 py-3">
                                 <span class="px-3 py-1 rounded-lg text-xs font-bold 
-                                    {{ in_array($warga->jabatan_sosial, ['RT', 'RW', 'Tokoh']) ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600' }}">
+                                    {{ in_array($warga->jabatan_sosial, ['RT', 'RW', 'Tokoh', 'Panitia', 'Admin', 'Super_Admin']) ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600' }}">
                                     {{ $warga->jabatan_sosial }}
                                 </span>
                             </td>
@@ -142,13 +142,20 @@
                                     @error('alamat') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                                 </div>
 
-                                <div>
+                               <div>
                                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Jabatan Sosial</label>
                                     <select wire:model="jabatan_sosial" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-0 focus:border-primary-600 transition">
                                         <option value="Warga">Warga Biasa</option>
-                                        <option value="RT">Ketua RT</option>
-                                        <option value="RW">Ketua RW</option>
                                         <option value="Tokoh">Tokoh Masyarakat</option>
+                                        <optgroup label="Pengurus Wilayah">
+                                            <option value="RT">Ketua RT</option>
+                                            <option value="RW">Ketua RW</option>
+                                        </optgroup>
+                                        <optgroup label="Akses Sistem">
+                                            <option value="Panitia">Panitia Qurban</option>
+                                            <option value="Admin">Admin</option>
+                                            <option value="Super_Admin">Super Admin</option>
+                                        </optgroup>
                                     </select>
                                     @error('jabatan_sosial') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                                 </div>

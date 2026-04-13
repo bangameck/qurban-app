@@ -11,7 +11,7 @@
 
 [FASE 2: LARAVEL ADMIN PAGE & LOGIC (FOKUS UTAMA)]
 [*] Setup Admin Panel (Bisa pakai Filament, Laravel Nova, atau custom Blade/Livewire).
-[ ] Buat CRUD Data Warga, RT, dan RW.
+[*] Buat CRUD Data Warga, RT, dan RW.
 [ ] Buat CRUD Data Sapi (termasuk update status proses pemotongan).
 [ ] Buat modul Kelompok Sapi (menghubungkan 7 mudhohi ke 1 sapi).
 [ ] Buat modul Pendaftar/Mudhohi.

@@ -26,7 +26,7 @@ return new class extends Migration
 
             $table->text('alamat');
             $table->foreignId('id_rt')->nullable()->constrained('rts')->nullOnDelete();
-            $table->enum('jabatan_sosial', ['Warga', 'RT', 'RW', 'Tokoh'])->default('Warga');
+            $table->enum('jabatan_sosial', ['Warga', 'RT', 'RW', 'Tokoh', 'Panitia', 'Admin', 'Super_Admin'])->default('Warga');
             $table->string('path_img')->nullable();
             $table->timestamps();
         });

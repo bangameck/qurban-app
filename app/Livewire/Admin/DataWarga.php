@@ -134,7 +134,7 @@ class DataWarga extends Component
             // Validasi string (biar angka 0 di depan ga hilang), diawali 0, dan murni angka
             'phone_number' => 'nullable|string|starts_with:0|regex:/^[0-9]+$/|max:20|unique:wargas,phone_number,'.$this->editId,
             'alamat' => 'required|string',
-            'jabatan_sosial' => 'required|in:Warga,RT,RW,Tokoh',
+            'jabatan_sosial' => 'required|in:Warga,RT,RW,Tokoh,Panitia,Admin,Super_Admin',
         ]);
 
         $imagePath = $this->existing_image;

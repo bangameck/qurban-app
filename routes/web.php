@@ -2,6 +2,8 @@
 
 use App\Livewire\Admin\AdminDashboard; // Pastikan nama class-nya benar sesuai yang kita buat (Dashboard, bukan AdminDashboard)
 use App\Livewire\Admin\AppSetting;
+use App\Livewire\Admin\DataRt;
+use App\Livewire\Admin\DataRw;
 use App\Livewire\Admin\DataWarga;
 use App\Livewire\Auth\Login;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +26,9 @@ Route::middleware('auth')->group(function () {
 
     // CRUD User
     Route::get('/admin/warga', DataWarga::class)->name('admin.warga');
+    Route::get('/admin/rw', DataRw::class)->name('admin.rw');
+    Route::get('/admin/rt', DataRt::class)->name('admin.rt');
+
     // Route Logout
     Route::post('/logout', function () {
         Auth::logout();

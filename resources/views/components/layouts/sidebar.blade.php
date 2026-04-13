@@ -40,6 +40,28 @@
       <span class="font-medium">Data Warga</span>
     </a>
 
+    <a href="{{ route('admin.rw') }}" wire:navigate
+      class="flex items-center gap-3 px-4 py-3 rounded-2xl transition {{ request()->routeIs('admin.rw') ? 'bg-white/10 text-primary-50 shadow-inner border border-white/5 backdrop-blur-sm' : 'hover:bg-white/5 text-primary-100 hover:text-white' }}">
+      <svg class="w-5 h-5 {{ request()->routeIs('admin.rw') ? 'text-primary-400' : 'text-primary-300' }}" fill="none"
+        stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+        </path>
+      </svg>
+      <span class="font-medium">Data RW</span>
+    </a>
+
+    <a href="{{ route('admin.rt') }}" wire:navigate
+      class="flex items-center gap-3 px-4 py-3 rounded-2xl transition {{ request()->routeIs('admin.rt') ? 'bg-white/10 text-primary-50 shadow-inner border border-white/5 backdrop-blur-sm' : 'hover:bg-white/5 text-primary-100 hover:text-white' }}">
+      <svg class="w-5 h-5 {{ request()->routeIs('admin.rt') ? 'text-primary-400' : 'text-primary-300' }}" fill="none"
+        stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+        </path>
+      </svg>
+      <span class="font-medium">Data RT</span>
+    </a>
+
     <div class="pt-4 mt-4 border-t border-white/10">
       <a href="{{ route('admin.settings') }}" wire:navigate
         class="flex justify-between items-center px-4 py-3 rounded-2xl transition {{ request()->routeIs('admin.settings') ? 'bg-white/10 text-primary-50 shadow-inner border border-white/5 backdrop-blur-sm' : 'hover:bg-white/5 text-primary-100 hover:text-white' }}">
