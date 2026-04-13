@@ -1,0 +1,50 @@
+=========================================================
+          TASKLIST APLIKASI QURBAN (LARAVEL + FLUTTER)
+=========================================================
+
+[FASE 1: SETUP & DATABASE]
+[*] Inisialisasi Project Laravel (v12/13).
+[*] Setup environment (.env) dan koneksi database.
+[*] Install package Spatie Laravel Permission untuk RBAC.
+[*] Buat Migration, Model, dan Factory/Seeder berdasarkan blueprint final.
+[*] Jalankan migrasi dan testing dummy data.
+
+[FASE 2: LARAVEL ADMIN PAGE & LOGIC (FOKUS UTAMA)]
+[*] Setup Admin Panel (Bisa pakai Filament, Laravel Nova, atau custom Blade/Livewire).
+[ ] Buat CRUD Data Warga, RT, dan RW.
+[ ] Buat CRUD Data Sapi (termasuk update status proses pemotongan).
+[ ] Buat modul Kelompok Sapi (menghubungkan 7 mudhohi ke 1 sapi).
+[ ] Buat modul Pendaftar/Mudhohi.
+[ ] Buat modul Sesi Distribusi (Jadwal Pengambilan).
+[ ] Buat modul Mustahiq (Penerima):
+    [ ] Logic generate Kode Unik (6 karakter).
+    [ ] Logic generate QR Code image dan simpan ke storage.
+    [ ] Logic assign warga ke Sesi Distribusi tertentu.
+[ ] Integrasi WhatsApp Gateway (Job/Queue untuk blast jadwal & QR Code).
+[ ] Buat halaman monitoring (Live Tracking) jumlah kupon yang sudah/belum discan.
+
+[FASE 3: LARAVEL API (UNTUK FLUTTER)]
+[ ] Setup Laravel Sanctum / JWT untuk autentikasi API.
+[ ] Buat endpoint API Login Panitia.
+[ ] Buat endpoint API Get Data Sesi & Mustahiq (untuk inisialisasi database lokal Flutter).
+[ ] Buat endpoint API Sync Offline-to-Online (menerima array data kupon yang discan saat offline).
+[ ] Buat endpoint API Scan Realtime (opsional jika sinyal bagus).
+
+[FASE 4: FLUTTER APP (SENJATA HARI H)]
+[ ] Inisialisasi project Flutter.
+[ ] Setup State Management (Provider/Riverpod) dan lokal database (Hive / SQFlite).
+[ ] Buat UI/UX Halaman Login.
+[ ] Buat UI/UX Dashboard Panitia (Tampilkan statistik scan hari ini).
+[ ] Buat UI/UX Scanner Camera (Integrasi library mobile_scanner/qr_code_scanner).
+[ ] Buat Logic Offline Scan & Sync:
+    [ ] Saat scan, validasi kode dengan data di SQLite/Hive.
+    [ ] Jika valid, ubah status di lokal HP jadi "Sudah Diambil", masukkan ke queue sync.
+    [ ] Background task: Cek koneksi, jika online otomatis push queue sync ke Laravel API.
+[ ] Build APK dan testing di berbagai device Android panitia.
+
+[FASE 5: TESTING & DEPLOYMENT]
+[ ] Deploy Laravel ke VPS/Shared Hosting.
+[ ] Testing load server (Simulasi scan massal).
+[ ] Briefing panitia pengurus qurban.
+[ ] GO LIVE!
+
