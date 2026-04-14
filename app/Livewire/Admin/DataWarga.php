@@ -72,7 +72,6 @@ class DataWarga extends Component
         return [
             'no_kk.numeric' => 'No. KK harus berupa angka!',
             'no_kk.max_digits' => 'No. KK maksimal 16 digit wak!',
-            'nik.required' => 'NIK wajib diisi wak!',
             'nik.unique' => 'NIK ini sudah terdaftar di sistem!',
             'nik.numeric' => 'NIK harus berupa angka!',
             'nik.max_digits' => 'NIK maksimal 16 digit wak!',

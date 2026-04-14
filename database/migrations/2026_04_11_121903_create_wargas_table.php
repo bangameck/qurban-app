@@ -18,7 +18,7 @@ return new class extends Migration
             // Tambahkan no_kk di sini, buat nullable karena opsional
             $table->string('no_kk')->nullable();
 
-            $table->string('nik')->unique();
+            $table->string('nik')->nullable()->unique();
             $table->string('nama');
 
             // Gabungkan nullable() dan unique() di sini wak!

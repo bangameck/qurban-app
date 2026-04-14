@@ -10,4 +10,10 @@ export default defineConfig({
         }),
         tailwindcss(), // 2. Daftarkan di sini
     ],
+    server: {
+        host: '0.0.0.0',
+        hmr: {
+            host: '192.168.1.26' // Ganti dengan link tunnel yang sedang aktif
+        },
+    },
 });

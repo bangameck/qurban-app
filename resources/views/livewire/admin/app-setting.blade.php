@@ -33,6 +33,16 @@
                     </label>
                 </div>
 
+                <div class="relative">
+                    <input type="text" id="masjid_name" wire:model="masjid_name"
+                        class="block px-4 py-3 w-full text-sm text-gray-900 bg-transparent rounded-xl border-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-600 peer transition-all"
+                        placeholder=" " />
+                    <label for="masjid_name"
+                        class="absolute text-sm text-gray-500 bg-white px-2 duration-300 transform -translate-y-1/2 scale-75 top-0 z-10 origin-[0] left-3 peer-focus:text-primary-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-3 peer-placeholder-shown:top-0 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75 cursor-text">
+                        Nama Masjid
+                    </label>
+                </div>
+
                 <div class="md:col-span-2">
                     <label class="block text-sm font-semibold text-gray-700 mb-3">Warna Tema Aplikasi (Otomatis
                         berubah)</label>
@@ -84,6 +94,8 @@
                     </div>
                 </div>
 
+
+
                 <div class="md:col-span-2 border-2 border-dashed border-primary-100 bg-primary-50/30 rounded-2xl p-6">
                     <label class="block text-sm font-semibold text-gray-700 mb-4">Logo Aplikasi & Favicon (Auto Compress
                         < 50kb)</label>
@@ -113,6 +125,193 @@
                                         memampatkan gambar... <span x-text="progress + '%'"></span></p>
                                 </div>
                             </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-primary-50 relative z-10 mb-8 mt-8">
+            <div class="flex items-center gap-3 mb-8 border-b border-gray-100 pb-4">
+                <div class="p-2 bg-amber-100 text-amber-700 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">Sistem Multi-Tahun & Biaya</h3>
+                    <p class="text-xs font-semibold text-gray-500 mt-1">Atur tahun aktif dan biaya patungan qurban</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="relative">
+                    <input type="number" id="tahun" wire:model="tahun" min="2020" max="2099"
+                        class="block px-4 py-3 w-full text-lg font-black text-primary-700 bg-primary-50 rounded-xl border-2 border-primary-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-600 peer transition-all text-center tracking-widest"
+                        placeholder=" " />
+                    <label for="tahun"
+                        class="absolute text-sm font-bold text-primary-600 bg-primary-50 px-2 duration-300 transform -translate-y-1/2 scale-75 top-0 z-10 origin-[0] left-3 peer-focus:text-primary-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-3 peer-placeholder-shown:top-0 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75 cursor-text rounded-md">
+                        Tahun Aktif Aplikasi
+                    </label>
+                    <p class="text-[10px] text-gray-400 mt-2 font-semibold">Tahun berjalan untuk semua data baru.</p>
+                </div>
+
+                <div class="relative">
+                    <input type="number" id="harga_patungan_tahun" wire:model="harga_patungan_tahun" min="2020"
+                        max="2099"
+                        class="block px-4 py-3 w-full text-lg font-black text-gray-700 bg-transparent rounded-xl border-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-600 peer transition-all text-center tracking-widest"
+                        placeholder=" " />
+                    <label for="harga_patungan_tahun"
+                        class="absolute text-sm text-gray-500 bg-white px-2 duration-300 transform -translate-y-1/2 scale-75 top-0 z-10 origin-[0] left-3 peer-focus:text-primary-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-3 peer-placeholder-shown:top-0 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75 cursor-text">
+                        Tahun Target Patungan
+                    </label>
+                    <p class="text-[10px] text-gray-400 mt-2 font-semibold">Berlaku untuk perhitungan biaya sapi.</p>
+                </div>
+
+                <div class="relative" x-data="{ 
+                        // Ambil nilai asli dari Livewire (integer)
+                        rawPrice: @entangle('harga_patungan'), 
+                        formattedPrice: '',
+                        
+                        init() {
+                            // Saat pertama load, format angkanya
+                            this.formatNumber();
+                            
+                            // Pantau kalau ada perubahan dari luar (Livewire)
+                            this.$watch('rawPrice', value => {
+                                this.formatNumber();
+                            });
+                        },
+                        formatNumber() {
+                            if(!this.rawPrice) { this.formattedPrice = ''; return; }
+                            // Ubah integer jadi format titik (misal 2000000 -> 2.000.000)
+                            this.formattedPrice = parseInt(this.rawPrice, 10).toLocaleString('id-ID');
+                        },
+                        updateRaw(event) {
+                            // Hapus semua karakter selain angka
+                            let numericValue = event.target.value.replace(/[^0-9]/g, '');
+                            
+                            // Update tampilan jadi format Rupiah yang benar saat mengetik
+                            event.target.value = numericValue ? parseInt(numericValue, 10).toLocaleString('id-ID') : '';
+                            
+                            // Kirim data murni (angka doang) ke Livewire
+                            this.rawPrice = numericValue ? parseInt(numericValue, 10) : 0;
+                        }
+                    }">
+                    <div class="flex items-center">
+                        <span class="absolute left-4 font-black text-gray-400">Rp</span>
+                        <input type="text" id="harga_patungan" x-bind:value="formattedPrice" @input="updateRaw($event)"
+                            class="block pl-12 pr-4 py-3 w-full text-lg font-black text-emerald-600 bg-transparent rounded-xl border-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-emerald-500 peer transition-all"
+                            placeholder="0" />
+                    </div>
+                    <label for="harga_patungan"
+                        class="absolute text-sm text-gray-500 bg-white px-2 duration-300 transform -translate-y-1/2 scale-75 top-0 z-10 origin-[0] left-3 peer-focus:text-emerald-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-3 peer-placeholder-shown:top-0 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75 cursor-text">
+                        Harga Patungan (1 Orang)
+                    </label>
+                    <p class="text-[10px] text-gray-400 mt-2 font-semibold">Otomatis diformat ribuan.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-primary-50 relative z-10 mb-8 mt-8">
+            <div class="flex items-center gap-3 mb-8 border-b border-gray-100 pb-4">
+                <div class="p-2 bg-indigo-100 text-indigo-700 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                        </path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800">Pejabat & Tanda Tangan</h3>
+                    <p class="text-xs font-semibold text-gray-500 mt-1">Digunakan untuk pengesahan otomatis pada cetak
+                        Sertifikat Qurban</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-inner">
+                    <div class="relative mb-6">
+                        <input type="text" id="nama_ketua_panitia" wire:model="nama_ketua_panitia"
+                            class="block px-4 py-3 w-full text-sm font-bold text-gray-800 bg-white rounded-xl border-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-600 peer transition-all"
+                            placeholder=" " />
+                        <label for="nama_ketua_panitia"
+                            class="absolute text-sm font-bold text-gray-500 bg-white px-2 duration-300 transform -translate-y-1/2 scale-75 top-0 z-10 origin-[0] left-3 peer-focus:text-primary-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-3 peer-placeholder-shown:top-0 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75 cursor-text">
+                            Nama Ketua Panitia Qurban
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase mb-3">Tanda Tangan Panitia
+                            (PNG Transparan)</label>
+                        <div class="flex items-center gap-4">
+                            @if ($ttd_panitia)
+                            <img src="{{ $ttd_panitia->temporaryUrl() }}"
+                                class="w-16 h-16 object-contain rounded-xl border border-gray-200 shadow-sm bg-white p-1">
+                            @elseif($existing_ttd_panitia)
+                            <img src="{{ asset('storage/'.$existing_ttd_panitia) }}"
+                                class="w-16 h-16 object-contain rounded-xl border border-gray-200 shadow-sm bg-white p-1">
+                            @else
+                            <div
+                                class="w-16 h-16 bg-white rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                    </path>
+                                </svg>
+                            </div>
+                            @endif
+                            <div class="flex-1">
+                                <input type="file" wire:model="ttd_panitia" accept="image/png, image/jpeg"
+                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-wider file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200 cursor-pointer transition">
+                                <div wire:loading wire:target="ttd_panitia"
+                                    class="text-[10px] text-indigo-600 mt-2 font-bold animate-pulse">Sedang
+                                    mengunggah...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-inner">
+                    <div class="relative mb-6">
+                        <input type="text" id="nama_ketua_masjid" wire:model="nama_ketua_masjid"
+                            class="block px-4 py-3 w-full text-sm font-bold text-gray-800 bg-white rounded-xl border-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-600 peer transition-all"
+                            placeholder=" " />
+                        <label for="nama_ketua_masjid"
+                            class="absolute text-sm font-bold text-gray-500 bg-white px-2 duration-300 transform -translate-y-1/2 scale-75 top-0 z-10 origin-[0] left-3 peer-focus:text-primary-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-3 peer-placeholder-shown:top-0 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75 cursor-text">
+                            Nama Ketua DKM / Masjid
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black text-gray-400 uppercase mb-3">Tanda Tangan DKM (PNG
+                            Transparan)</label>
+                        <div class="flex items-center gap-4">
+                            @if ($ttd_masjid)
+                            <img src="{{ $ttd_masjid->temporaryUrl() }}"
+                                class="w-16 h-16 object-contain rounded-xl border border-gray-200 shadow-sm bg-white p-1">
+                            @elseif($existing_ttd_masjid)
+                            <img src="{{ asset('storage/'.$existing_ttd_masjid) }}"
+                                class="w-16 h-16 object-contain rounded-xl border border-gray-200 shadow-sm bg-white p-1">
+                            @else
+                            <div
+                                class="w-16 h-16 bg-white rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                    </path>
+                                </svg>
+                            </div>
+                            @endif
+                            <div class="flex-1">
+                                <input type="file" wire:model="ttd_masjid" accept="image/png, image/jpeg"
+                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-wider file:bg-indigo-100 file:text-indigo-700 hover:file:bg-indigo-200 cursor-pointer transition">
+                                <div wire:loading wire:target="ttd_masjid"
+                                    class="text-[10px] text-indigo-600 mt-2 font-bold animate-pulse">Sedang
+                                    mengunggah...</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -27,5 +27,8 @@ class AppServiceProvider extends ServiceProvider
             // Bagikan ke semua view Blade
             View::share('globalSettings', $globalSettings);
         }
+        if (config('app.env') !== 'local' || isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+            URL::forceScheme('https');
+        }
     }
 }

@@ -8,14 +8,40 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
 use Livewire\Component;
+use Livewire\WithFileUploads; // PENTING: Tambahkan ini wak!
 
 #[Layout('components.layouts.app')]
 #[Lazy]
 class AppSetting extends Component
 {
+    use WithFileUploads; // PENTING: Aktifkan trait di sini!
+
     public $app_name;
 
     public $login_greeting;
+
+    public $masjid_name;
+
+    // Variabel Multi-Tahun
+    public $tahun;
+
+    public $harga_patungan;
+
+    public $harga_patungan_tahun;
+
+    // --- VARIABEL BARU TANDA TANGAN & PEJABAT ---
+    public $nama_ketua_panitia;
+
+    public $nama_ketua_masjid;
+
+    public $ttd_panitia; // Untuk file upload baru
+
+    public $ttd_masjid; // Untuk file upload baru
+
+    public $existing_ttd_panitia; // Nampung foto lama
+
+    public $existing_ttd_masjid; // Nampung foto lama
+    // --------------------------------------------
 
     public $fonnte_token;
 
@@ -31,15 +57,28 @@ class AppSetting extends Component
 
     public $privacy_policy;
 
-    // Properti baru untuk menerima hasil kompresi Base64 dari JS
     public $new_logo_base64;
 
     public function mount()
     {
         usleep(200000);
         $settings = SettingModel::pluck('value', 'key')->toArray();
+
         $this->app_name = $settings['app_name'] ?? 'Qurban App';
         $this->login_greeting = $settings['login_greeting'] ?? 'Selamat Datang di Sistem Qurban';
+        $this->masjid_name = $settings['masjid_name'] ?? 'Masjid Nurul Fitrah';
+
+        $this->tahun = $settings['tahun'] ?? date('Y');
+        $this->harga_patungan = $settings['harga_patungan'] ?? 0;
+        $this->harga_patungan_tahun = $settings['harga_patungan_tahun'] ?? date('Y');
+
+        // --- AMBIL DATA PEJABAT ---
+        $this->nama_ketua_panitia = $settings['nama_ketua_panitia'] ?? '';
+        $this->nama_ketua_masjid = $settings['nama_ketua_masjid'] ?? '';
+        $this->existing_ttd_panitia = $settings['ttd_panitia'] ?? '';
+        $this->existing_ttd_masjid = $settings['ttd_masjid'] ?? '';
+        // --------------------------
+
         $this->fonnte_token = $settings['fonnte_token'] ?? '';
         $this->popup_text = $settings['popup_text'] ?? '';
         $this->enable_popup = ($settings['enable_popup'] ?? '0') == '1';
@@ -55,26 +94,54 @@ class AppSetting extends Component
             // Validasi Input
             $this->validate([
                 'app_name' => 'required|string|max:50',
-            ], [
-                'app_name.required' => 'Nama Aplikasi wajib diisi wak!',
+                'tahun' => 'required|integer|min:2020|max:2099',
+                'harga_patungan' => 'required|numeric|min:0',
+                'harga_patungan_tahun' => 'required|integer|min:2020|max:2099',
+                // Validasi Tanda Tangan
+                'nama_ketua_panitia' => 'nullable|string|max:100',
+                'nama_ketua_masjid' => 'nullable|string|max:100',
+                'ttd_panitia' => 'nullable|image|max:1024', // Maksimal 1MB
+                'ttd_masjid' => 'nullable|image|max:1024',
             ]);
 
-            // 1. Proses Gambar Base64 (Jika ada)
+            // Proses Gambar Base64 (Logo)
             if ($this->new_logo_base64) {
-                // Pecah string Base64 (contoh: data:image/jpeg;base64,.....)
                 $image_parts = explode(';base64,', $this->new_logo_base64);
                 if (count($image_parts) == 2) {
                     $image_base64 = base64_decode($image_parts[1]);
-                    // Simpan ke public folder
                     file_put_contents(public_path('logo.png'), $image_base64);
                     file_put_contents(public_path('favicon.ico'), $image_base64);
                 }
             }
 
-            // 2. Kumpulkan & Simpan Data
+            // --- PROSES UPLOAD TANDA TANGAN ---
+            $path_ttd_panitia = $this->existing_ttd_panitia;
+            if ($this->ttd_panitia) {
+                $path_ttd_panitia = $this->ttd_panitia->store('ttd_pejabat', 'public');
+            }
+
+            $path_ttd_masjid = $this->existing_ttd_masjid;
+            if ($this->ttd_masjid) {
+                $path_ttd_masjid = $this->ttd_masjid->store('ttd_pejabat', 'public');
+            }
+            // ----------------------------------
+
+            // Kumpulkan Data untuk disimpan ke tabel app_settings
             $data = [
                 'app_name' => $this->app_name,
                 'login_greeting' => $this->login_greeting,
+                'masjid_name' => $this->masjid_name,
+                'tahun' => $this->tahun,
+                'harga_patungan' => $this->harga_patungan,
+                'harga_patungan_tahun' => $this->harga_patungan_tahun,
+
+                // --- SIMPAN DATA PEJABAT ---
+                'nama_ketua_panitia' => $this->nama_ketua_panitia,
+                'nama_ketua_masjid' => $this->nama_ketua_masjid,
+                'ttd_panitia' => $path_ttd_panitia,
+                'ttd_masjid' => $path_ttd_masjid,
+                // ---------------------------
+
                 'fonnte_token' => $this->fonnte_token,
                 'popup_text' => $this->popup_text,
                 'enable_popup' => $this->enable_popup ? '1' : '0',
@@ -90,14 +157,10 @@ class AppSetting extends Component
 
             Cache::forget('global_settings');
 
-            // Trigger Notifikasi Dynamic Island (Success)
             $this->dispatch('notify-success', 'Mantap! Pengaturan berhasil disimpan.');
-
-            // Kosongkan form base64 biar ga dikirim ulang kalau save dua kali
             $this->new_logo_base64 = null;
 
         } catch (ValidationException $e) {
-            // Trigger Notifikasi Toastr (Error)
             foreach ($e->validator->errors()->all() as $error) {
                 $this->dispatch('notify-error', $error);
             }
@@ -108,7 +171,6 @@ class AppSetting extends Component
 
     public function placeholder()
     {
-        // Panggil view skeleton khusus untuk halaman ini
         return view('components.skeleton._app-setting');
     }
 
