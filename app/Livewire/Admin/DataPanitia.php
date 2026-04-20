@@ -162,6 +162,6 @@ class DataPanitia extends Component
             'wargas' => $wargas,
             'kelompoks' => $kelompoks,
             'namaKetua' => $namaKetua,
-        ])->title('Manajemen Panitia | Qurban App');
+        ])->title('Manajemen Panitia');
     }
 }

@@ -195,6 +195,6 @@ class DataMustahiq extends Component
             'mustahiqs' => $mustahiqs,
             'wargas' => $wargas,
             'sesis' => $sesis,
-        ])->title('Manajemen Kupon | Qurban App');
+        ])->title('Manajemen Kupon');
     }
 }

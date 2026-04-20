@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\AppSetting;
 use App\Models\Mudhohi;
 use App\Models\Mustahiq;
+use App\Models\Panitia;
 use App\Models\Sapi;
 use App\Models\SesiDistribusi;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +32,9 @@ class AdminDashboard extends Component
     public $chartTipeQurban = [];
 
     public $chartDistribusi = [];
+
+    // Data Gabungan Semua Kupon (Mustahiq, Mudhohi, Panitia)
+    public $chartKategoriKupon = [];
 
     public function mount()
     {
@@ -61,8 +65,18 @@ class AdminDashboard extends Component
         // 1. Data KPI Ringkasan
         $this->kpi['sapi'] = Sapi::where('tahun', $this->tahun_aktif)->count();
         $this->kpi['mudhohi'] = Mudhohi::where('tahun', $this->tahun_aktif)->count();
-        $this->kpi['kupon_total'] = Mustahiq::where('tahun', $this->tahun_aktif)->count();
-        $this->kpi['kupon_scan'] = Mustahiq::where('tahun', $this->tahun_aktif)->where('status_pengambilan', 'Sudah')->count();
+
+        // Hitung total kupon dari ketiga tabel
+        $countMustahiq = Mustahiq::where('tahun', $this->tahun_aktif)->count();
+        $countMudhohi = Mudhohi::where('tahun', $this->tahun_aktif)->whereNotNull('kode_unik_kupon')->count();
+        $countPanitia = Panitia::where('tahun', $this->tahun_aktif)->whereNotNull('kode_unik_kupon')->count();
+        $this->kpi['kupon_total'] = $countMustahiq + $countMudhohi + $countPanitia;
+
+        // Hitung total kupon yang sudah diambil dari ketiga tabel
+        $scanMustahiq = Mustahiq::where('tahun', $this->tahun_aktif)->where('status_pengambilan', 'Sudah')->count();
+        $scanMudhohi = Mudhohi::where('tahun', $this->tahun_aktif)->where('status_pengambilan', 'Sudah')->count();
+        $scanPanitia = Panitia::where('tahun', $this->tahun_aktif)->where('status_pengambilan', 'Sudah')->count();
+        $this->kpi['kupon_scan'] = $scanMustahiq + $scanMudhohi + $scanPanitia;
 
         // 2. Data Chart Status Sapi (Donut Chart)
         $sapiStats = Sapi::where('tahun', $this->tahun_aktif)
@@ -119,15 +133,26 @@ class AdminDashboard extends Component
             'sudah' => empty($sudahAmbil) ? [0] : $sudahAmbil,
             'belum' => empty($belumAmbil) ? [0] : $belumAmbil,
         ];
+
+        // 5. Data Chart Komposisi Kategori Kupon Premium
+        $this->chartKategoriKupon = [
+            'labels' => ['Peserta (Mustahiq)', 'Kupon Mudhohi', 'Kupon Panitia'],
+            'series' => [
+                $countMustahiq,
+                $countMudhohi,
+                $countPanitia,
+            ],
+            'total' => $countMustahiq + $countMudhohi + $countPanitia,
+        ];
     }
 
     public function placeholder()
     {
-        return view('components.skeleton._default');
+        return view('components.skeleton._dashboard');
     }
 
     public function render()
     {
-        return view('livewire.admin.dashboard')->title('Dashboard Utama | Qurban App');
+        return view('livewire.admin.dashboard')->title('Dashboard');
     }
 }

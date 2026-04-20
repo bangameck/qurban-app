@@ -118,7 +118,7 @@
                                     <input type="text" inputmode="numeric" id="nik" wire:model="nik" 
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 16);"
                                         class="block px-4 py-3 w-full text-sm text-gray-900 bg-transparent rounded-xl border-2 border-gray-200 appearance-none focus:outline-none focus:ring-0 focus:border-primary-600 peer transition-all" placeholder=" " />
-                                    <label for="nik" class="absolute text-sm text-gray-500 bg-white px-2 duration-300 transform -translate-y-1/2 scale-75 top-0 z-10 origin-[0] left-3 peer-focus:text-primary-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-3 peer-placeholder-shown:top-0 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75 cursor-text">NIK KTP (Wajib)</label>
+                                    <label for="nik" class="absolute text-sm text-gray-500 bg-white px-2 duration-300 transform -translate-y-1/2 scale-75 top-0 z-10 origin-[0] left-3 peer-focus:text-primary-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-3 peer-placeholder-shown:top-0 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75 cursor-text">NIK KTP (Opsional)</label>
                                     @error('nik') <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span> @enderror
                                 </div>
 
@@ -347,6 +347,14 @@
                         </div>
 
                         <div class="flex flex-col gap-3">
+                            <a href="{{ asset('assets/files/import_warga.xlsx') }}" download 
+                                class="w-full py-3 bg-emerald-50 text-emerald-700 rounded-xl font-bold border border-emerald-100 hover:bg-emerald-100 transition flex items-center justify-center gap-2 mb-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                                Download Template Excel
+                            </a>
+
                             <button type="submit" 
                                 class="w-full py-3 rounded-xl font-bold transition flex items-center justify-center gap-2"
                                 :class="($wire.importFile && $wire.importRtId) ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/20' : 'bg-gray-200 text-gray-400 cursor-not-allowed'"

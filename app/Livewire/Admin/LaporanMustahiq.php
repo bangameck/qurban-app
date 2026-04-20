@@ -46,6 +46,6 @@ class LaporanMustahiq extends Component
 
         return view('livewire.admin.laporan-mustahiq', [
             'sesis' => $sesis,
-        ])->title('Laporan & Cetak Kupon | Qurban App');
+        ])->title('Laporan & Cetak Kupon');
     }
 }

@@ -169,6 +169,6 @@ class DataRt extends Component
             'rts' => $rts,
             'listRw' => $listRw,
             'kandidatPejabat' => $kandidatPejabat,
-        ])->title('Data RT | Qurban App');
+        ])->title('Data RT');
     }
 }

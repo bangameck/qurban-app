@@ -83,6 +83,6 @@ class Login extends Component
 
     public function render()
     {
-        return view('livewire.auth.login')->title('Login Masuk | Qurban App');
+        return view('livewire.auth.login')->title('Login Masuk');
     }
 }

@@ -54,7 +54,7 @@
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-2">
                                     <div class="p-1 bg-white border border-rose-200 rounded-lg shadow-sm">
-                                        <img src="{{ asset('storage/'.$p->path_qr_code) }}" class="w-10 h-10 object-contain">
+                                        <img src="{{ asset('storage/'.$p->path_qr_code) }}" class="w-10 h-10 object-contain blur-[3px] hover:blur-none transition-all duration-300 cursor-pointer" title="Hover untuk melihat QR Code">
                                     </div>
                                     <span class="font-mono text-xs font-black text-rose-600">{{ $p->kode_unik_kupon }}</span>
                                 </div>

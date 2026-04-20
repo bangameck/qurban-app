@@ -21,7 +21,7 @@
         <div class="w-full max-w-5xl bg-white/70 backdrop-blur-xl border border-white/50 rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-primary-900/10 mb-16 relative overflow-hidden group hover:bg-white/90 transition-all duration-500">
             <div class="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-primary-100 to-transparent rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
             
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-gray-200/50 relative z-10">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-gray-200/50 relative z-10">
                 
                 <div class="px-2 py-4 md:py-0 text-center">
                     <div class="flex items-center justify-center gap-2 mb-3">
@@ -61,22 +61,32 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                         </div>
                     </div>
-                    <div class="text-4xl md:text-5xl font-black" style="color: var(--color-primary-600);">{{ $stats['daging_tersalurkan'] }}</div>
-                    <div class="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">Kupon Disalurkan</div>
+                    <div class="text-4xl md:text-5xl font-black flex items-end justify-center gap-1" style="color: var(--color-primary-600);">
+                        {{ $stats['kupon_scan'] }}
+                        <span class="text-xl md:text-2xl text-gray-400 mb-1">/{{ $stats['kupon_total'] }}</span>
+                    </div>
+                    <div class="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest mt-1">Kupon Disalurkan</div>
+                </div>
+
+                <div class="px-2 py-4 md:py-0 text-center col-span-2 md:col-span-1">
+                    <div class="flex items-center justify-center gap-2 mb-3">
+                        <div class="p-2 bg-teal-100 text-teal-600 rounded-lg">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        </div>
+                    </div>
+                    <div class="text-4xl md:text-5xl font-black" style="color: var(--color-primary-600);">
+                        {{ $stats['kupon_total'] > 0 ? round(($stats['kupon_scan'] / $stats['kupon_total']) * 100) : 0 }}%
+                    </div>
+                    <div class="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-widest">Progress Distribusi</div>
                 </div>
 
             </div>
         </div>
 
         <div class="flex flex-col sm:flex-row justify-center gap-4 w-full px-4">
-            <button onclick="alert('Fitur pencarian kupon akan segera hadir pada update berikutnya!')" class="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white font-bold rounded-2xl shadow-xl shadow-gray-900/20 hover:bg-black hover:-translate-y-1 transition transform flex items-center justify-center gap-3">
-                <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                Cek Status Kupon Saya
-            </button>
-            
-            <a href="{{ route('login') }}" class="w-full sm:w-auto px-8 py-4 bg-white text-gray-700 font-bold rounded-2xl shadow-sm border border-gray-200 hover:bg-gray-50 hover:-translate-y-1 transition transform flex items-center justify-center gap-3">
-                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
-                Login Panitia
+            <a href="{{ route('live.tv') }}" class="w-full sm:w-auto px-8 py-4 bg-gray-900 text-white font-bold rounded-2xl shadow-xl shadow-gray-900/20 hover:bg-black hover:-translate-y-1 transition transform flex items-center justify-center gap-3">
+                <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                Live Display Qurban
             </a>
         </div>
 

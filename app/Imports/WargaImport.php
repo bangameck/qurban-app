@@ -33,7 +33,7 @@ class WargaImport implements ToModel, WithHeadingRow, WithValidation
     public function rules(): array
     {
         return [
-            'nik' => 'required|numeric|digits:16|unique:wargas,nik',
+            'nik' => 'nullable|numeric|digits:16|unique:wargas,nik',
             'nama' => 'required|string|max:255',
             'no_kk' => 'nullable|numeric|digits:16',
             'alamat' => 'required|string',

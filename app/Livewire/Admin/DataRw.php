@@ -175,6 +175,6 @@ class DataRw extends Component
         return view('livewire.admin.data-rw', [
             'rws' => $rws,
             'kandidatPejabat' => $kandidatPejabat,
-        ])->title('Data RW | Qurban App');
+        ])->title('Data RW');
     }
 }

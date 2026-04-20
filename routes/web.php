@@ -3,13 +3,15 @@
 use App\Http\Controllers\KuponMudhohiController;
 use App\Http\Controllers\KuponMustahiqController;
 use App\Http\Controllers\KuponPanitiaController;
+use App\Http\Controllers\RabController;
 use App\Http\Controllers\SertifikatController;
-use App\Livewire\Admin\AdminDashboard; // Pastikan nama class-nya benar sesuai yang kita buat (Dashboard, bukan AdminDashboard)
+use App\Livewire\Admin\AdminDashboard;
 use App\Livewire\Admin\AppSetting;
 use App\Livewire\Admin\DataKelompokSapi;
 use App\Livewire\Admin\DataMudhohi;
 use App\Livewire\Admin\DataMustahiq;
 use App\Livewire\Admin\DataPanitia;
+use App\Livewire\Admin\DataRab;
 use App\Livewire\Admin\DataRt;
 use App\Livewire\Admin\DataRw;
 use App\Livewire\Admin\DataSapi;
@@ -18,6 +20,7 @@ use App\Livewire\Admin\DataWarga;
 use App\Livewire\Admin\LaporanMudhohi;
 use App\Livewire\Admin\LaporanMustahiq;
 use App\Livewire\Admin\LaporanPanitia;
+use App\Livewire\Admin\ManajemenUser;
 use App\Livewire\Admin\ScannerKupon;
 use App\Livewire\Auth\Login;
 use App\Livewire\Display\LiveScreen;
@@ -58,6 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/distribusi', DataSesiDistribusi::class)->name('admin.distribusi');
     Route::get('/admin/mustahiq', DataMustahiq::class)->name('admin.mustahiq');
     Route::get('/admin/scanner', ScannerKupon::class)->name('admin.scanner');
+    Route::get('/admin/users', ManajemenUser::class)->name('admin.users');
     Route::get('/laporan/mustahiq', LaporanMustahiq::class)->name('admin.laporan.mustahiq');
     Route::get('/laporan/cetak-kupon-sesi/{id_sesi}', [KuponMustahiqController::class, 'cetakPerSesi'])->name('admin.cetak_kupon_sesi');
     Route::get('/laporan/mudhohi', LaporanMudhohi::class)->name('admin.laporan.mudhohi');
@@ -65,6 +69,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan/panitia', LaporanPanitia::class)->name('admin.laporan.panitia');
     Route::get('/laporan/panitia/cetak-pdf', [KuponPanitiaController::class, 'cetakSemua'])->name('admin.cetak_kupon_panitia');
     Route::get('/laporan/panitia/cetak-id-card', [KuponPanitiaController::class, 'cetakIdCard'])->name('admin.cetak_idcard_panitia');
+    Route::get('/laporan/rab', DataRab::class)->name('admin.laporan.rab');
+    Route::get('/admin/rab/export-pdf', [RabController::class, 'exportPdf'])->name('admin.rab.pdf');
+    Route::get('/admin/rab/export-excel', [RabController::class, 'exportExcel'])->name('admin.rab.excel');
 
     // Route Logout
     Route::post('/logout', function () {

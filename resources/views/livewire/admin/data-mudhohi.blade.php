@@ -64,7 +64,7 @@
                                 <div class="flex items-start gap-3">
                                     <div class="shrink-0 p-1 bg-white border border-gray-200 rounded-lg shadow-sm">
                                         @if($mudhohi->path_qr_code)
-                                            <img src="{{ asset('storage/'.$mudhohi->path_qr_code) }}" class="w-10 h-10 object-contain">
+                                            <img src="{{ asset('storage/'.$mudhohi->path_qr_code) }}" class="w-10 h-10 object-contain blur-[3px] hover:blur-none transition-all duration-300 cursor-pointer" title="Hover untuk melihat QR Code">
                                         @else
                                             <div class="w-10 h-10 bg-gray-50 flex items-center justify-center text-[8px] text-gray-400">NO QR</div>
                                         @endif
@@ -140,48 +140,73 @@
                             </div>
 
                             <div class="grid grid-cols-1 gap-y-5">
-                                <div wire:ignore x-data='{
-                                        tomSelectInstance: null,
-                                        init() {
-                                            this.tomSelectInstance = new TomSelect(this.$refs.wargaSelect, {
-                                                valueField: "id", searchField: ["nama", "nik"], placeholder: "Ketik Nama atau NIK Warga...",
-                                                render: {
-                                                    option: function(data, escape) {
-                                                        return `<div class="flex items-center gap-3 p-2"><img class="w-8 h-8 rounded-full object-cover" src="${data.img}"><div><div class="font-bold text-gray-800">${escape(data.nama)}</div><div class="text-xs text-gray-400">NIK: ${escape(data.nik)}</div></div></div>`;
+                                @if(!$editId)
+                                    <div wire:ignore x-data='{
+                                            tomSelectInstance: null,
+                                            init() {
+                                                this.tomSelectInstance = new TomSelect(this.$refs.wargaSelect, {
+                                                    valueField: "id", searchField: ["nama", "nik"], placeholder: "Ketik Nama atau NIK Warga...",
+                                                    render: {
+                                                        option: function(data, escape) {
+                                                            return `<div class="flex items-center gap-3 p-2"><img class="w-8 h-8 rounded-full object-cover" src="${data.img}"><div><div class="font-bold text-gray-800">${escape(data.nama)}</div><div class="text-xs text-gray-400">NIK: ${escape(data.nik)}</div></div></div>`;
+                                                        },
+                                                        item: function(data, escape) {
+                                                            return `<div class="flex items-center gap-2"><img class="w-5 h-5 rounded-full object-cover" src="${data.img}"><span class="font-bold text-sm">${escape(data.nama)}</span></div>`;
+                                                        }
                                                     },
-                                                    item: function(data, escape) {
-                                                        return `<div class="flex items-center gap-2"><img class="w-5 h-5 rounded-full object-cover" src="${data.img}"><span class="font-bold text-sm">${escape(data.nama)}</span></div>`;
-                                                    }
-                                                },
-                                                onChange: (value) => { $wire.set("id_warga", value); }
-                                            });
-                                            $wire.$watch("id_warga", (value) => {
-                                                if (value) { this.tomSelectInstance.setValue(value, true); } 
-                                                else { this.tomSelectInstance.clear(true); }
-                                            });
-                                        }
-                                     }'>
-                                    <label class="block text-[10px] font-black text-gray-400 uppercase mb-2 ml-1">Pilih Warga (Mudhohi)</label>
-                                    <select x-ref="wargaSelect" class="w-full">
-                                        <option value="">Cari Warga...</option>
-                                        @foreach($wargas as $warga)
-                                            @php $imgUrl = $warga->path_img ? asset('storage/'.$warga->path_img) : 'https://ui-avatars.com/api/?name='.urlencode($warga->nama).'&background=random'; @endphp
-                                            <option value="{{ $warga->id }}" data-nama="{{ $warga->nama }}" data-nik="{{ $warga->nik }}" data-img="{{ $imgUrl }}">{{ $warga->nama }} ({{ $warga->nik }})</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                @error('id_warga') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
+                                                    onChange: (value) => { $wire.set("id_warga", value); }
+                                                });
+                                                $wire.$watch("id_warga", (value) => {
+                                                    if (value) { this.tomSelectInstance.setValue(value, true); } 
+                                                    else { this.tomSelectInstance.clear(true); }
+                                                });
+                                            }
+                                         }'>
+                                        <label class="block text-[10px] font-black text-gray-400 uppercase mb-2 ml-1">Pilih Warga (Mudhohi)</label>
+                                        <select x-ref="wargaSelect" class="w-full">
+                                            <option value="">Cari Warga...</option>
+                                            @foreach($wargas as $warga)
+                                                @php $imgUrl = $warga->path_img ? asset('storage/'.$warga->path_img) : 'https://ui-avatars.com/api/?name='.urlencode($warga->nama).'&background=random'; @endphp
+                                                <option value="{{ $warga->id }}" data-nama="{{ $warga->nama }}" data-nik="{{ $warga->nik }}" data-img="{{ $imgUrl }}">{{ $warga->nama }} ({{ $warga->nik }})</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    @error('id_warga') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
+                                @else
+                                    @php
+                                        $editWarga = \App\Models\Warga::find($id_warga);
+                                    @endphp
+                                    
+                                    @if($editWarga)
+                                    <div class="relative animate-fadeIn">
+                                        <label class="block text-[10px] font-black text-gray-400 uppercase mb-3 ml-1 tracking-widest flex items-center gap-2">
+                                            Identitas Mudhohi
+                                            <span class="px-2 py-0.5 bg-gray-200 text-gray-500 rounded text-[8px] metallic-effect">TERKUNCI</span>
+                                        </label>
+                                        
+                                        <div class="relative flex items-center justify-between p-5 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl shadow-inner cursor-not-allowed border border-gray-100 overflow-hidden">
+                                            
+                                            <div class="absolute -left-5 -top-5 w-24 h-24 rounded-full bg-primary-100/50"></div>
+                                            <div class="absolute -right-5 -bottom-5 w-32 h-32 rounded-full bg-primary-200/40"></div>
+                                            <div class="absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500/10 to-transparent"></div>
 
-                                <div class="relative">
-                                    <label class="block text-[10px] font-black text-gray-400 uppercase mb-2 ml-1">Pilih Kelompok Sapi</label>
-                                    <select wire:model="id_kelompok_sapi" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-0 focus:border-primary-600 transition-all font-bold text-gray-700">
-                                        <option value="">-- Pilih Kelompok --</option>
-                                        @foreach($kelompoks as $kelompok)
-                                            <option value="{{ $kelompok->id }}">{{ $kelompok->nama_kelompok }} (Terisi: {{ $kelompok->mudhohis_count }}/7) @if($kelompok->sapi) - {{ $kelompok->sapi->kode_sapi }} @endif</option>
-                                        @endforeach
-                                    </select>
-                                    @error('id_kelompok_sapi') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
-                                </div>
+                                            <div class="flex items-center gap-5 relative z-10">
+                                                <img src="{{ $editWarga->path_img ? asset('storage/'.$editWarga->path_img) : 'https://ui-avatars.com/api/?name='.urlencode($editWarga->nama).'&background=10b981&color=fff&size=150' }}" class="w-14 h-14 rounded-full object-cover border-4 border-white shadow-md shadow-primary-900/10 grayscale-[15%]">
+                                                <div>
+                                                    <h4 class="font-black text-gray-700 text-lg leading-tight">{{ $editWarga->nama }}</h4>
+                                                    <p class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mt-1">NIK: {{ $editWarga->nik }}</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="w-12 h-12 rounded-xl metallic-effect bg-gray-200 flex items-center justify-center text-gray-400 shadow-lg relative z-10 border border-gray-100">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                            </div>
+                                        </div>
+                                        <p class="text-[9px] text-gray-400 font-bold mt-2 ml-1 italic">* Identitas Mudhohi tidak dapat diubah setelah terdaftar.</p>
+                                    </div>
+                                    @error('id_warga') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
+                                    @endif
+                                @endif
 
                                 <div>
                                     <label class="block text-[10px] font-black text-gray-400 uppercase mb-2 ml-1">Tipe Qurban</label>
@@ -192,6 +217,19 @@
                                     </div>
                                     @error('tipe_qurban') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
                                 </div>
+
+                                @if($tipe_qurban !== 'Individu')
+                                <div class="relative animate-fadeIn">
+                                    <label class="block text-[10px] font-black text-gray-400 uppercase mb-2 ml-1">Pilih Kelompok Sapi</label>
+                                    <select wire:model="id_kelompok_sapi" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:ring-0 focus:border-primary-600 transition-all font-bold text-gray-700 cursor-pointer">
+                                        <option value="">-- Pilih Kelompok --</option>
+                                        @foreach($kelompoks as $kelompok)
+                                            <option value="{{ $kelompok->id }}">{{ $kelompok->nama_kelompok }} (Terisi: {{ $kelompok->mudhohis_count }}/7) @if($kelompok->sapi) - {{ $kelompok->sapi->kode_sapi }} @endif</option>
+                                        @endforeach
+                                    </select>
+                                    @error('id_kelompok_sapi') <span class="text-red-500 text-xs mt-1 block font-bold">{{ $message }}</span> @enderror
+                                </div>
+                                @endif
 
                                 <div class="bg-gray-50 p-5 rounded-2xl border border-gray-200 mt-6 shadow-inner" 
                                      x-data="{
@@ -222,13 +260,20 @@
                                                     let calcSize = Math.round((base64data.length - 814) / 1.37);
 
                                                     while (calcSize > 100000 && quality > 0.1) {
-                                                        quality -= 0.1; base64data = canvas.toDataURL('image/jpeg', quality);
+                                                        quality -= 0.1; base64data = canvas.toDataURL('image/jpeg', Math.max(0.1, quality));
                                                         calcSize = Math.round((base64data.length - 814) / 1.37);
                                                     }
 
                                                     this.progress = 80; this.compressedSize = this.formatBytes(calcSize); this.previewUrl = base64data;
                                                     
-                                                    fetch(base64data).then(res => res.blob()).then(blob => {
+                                                    try {
+                                                        const byteString = atob(base64data.split(',')[1]);
+                                                        const mimeString = base64data.split(',')[0].split(':')[1].split(';')[0];
+                                                        const ab = new ArrayBuffer(byteString.length);
+                                                        const ia = new Uint8Array(ab);
+                                                        for (let i = 0; i < byteString.length; i++) { ia[i] = byteString.charCodeAt(i); }
+                                                        const blob = new Blob([ab], { type: mimeString });
+                                                        
                                                         const newFilename = file.name.replace(/\.[^/.]+$/, '') + '_compressed.jpg';
                                                         const newFile = new File([blob], newFilename, { type: 'image/jpeg' });
                                                         this.$wire.upload('bukti_pendaftaran', newFile, 
@@ -236,7 +281,11 @@
                                                             () => { this.isCompressing = false; alert('Gagal upload ke server!'); }, 
                                                             (ev) => { this.progress = 80 + (ev.detail.progress * 0.2); }
                                                         );
-                                                    });
+                                                    } catch (err) {
+                                                        console.error(err);
+                                                        alert('Terjadi kesalahan saat memproses gambar.');
+                                                        this.isCompressing = false;
+                                                    }
                                                 }
                                             }
                                         }

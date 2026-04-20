@@ -232,6 +232,6 @@ class DataSapi extends Component
             ->orderBy('id', 'desc')
             ->paginate(10);
 
-        return view('livewire.admin.data-sapi', ['sapis' => $sapis])->title('Data Sapi | Qurban App');
+        return view('livewire.admin.data-sapi', ['sapis' => $sapis])->title('Data Sapi');
     }
 }

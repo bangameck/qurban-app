@@ -126,9 +126,13 @@ class DataWarga extends Component
 
     public function save()
     {
+        if (trim((string) $this->nik) === '') {
+            $this->nik = null;
+        }
+
         $this->validate([
             'no_kk' => 'nullable|numeric|max_digits:16',
-            'nik' => 'required|numeric|max_digits:16|unique:wargas,nik,'.$this->editId,
+            'nik' => 'nullable|numeric|max_digits:16|unique:wargas,nik,'.$this->editId,
             'nama' => 'required|string|max:255',
             // Validasi string (biar angka 0 di depan ga hilang), diawali 0, dan murni angka
             'phone_number' => 'nullable|string|starts_with:0|regex:/^[0-9]+$/|max:20|unique:wargas,phone_number,'.$this->editId,
@@ -246,6 +250,6 @@ class DataWarga extends Component
         return view('livewire.admin.data-warga', [
             'wargas' => $wargas,
             'listRt' => $listRt,
-        ])->title('Data Warga | Qurban App');
+        ])->title('Data Warga');
     }
 }

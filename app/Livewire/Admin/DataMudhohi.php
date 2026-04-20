@@ -106,24 +106,30 @@ class DataMudhohi extends Component
 
     public function save()
     {
+        if ($this->tipe_qurban === 'Individu') {
+            $this->id_kelompok_sapi = null;
+        }
+
         $this->validate([
             'id_warga' => 'required|exists:wargas,id|unique:mudhohis,id_warga,'.$this->editId,
-            'id_kelompok_sapi' => 'required|exists:kelompok_sapis,id',
+            'id_kelompok_sapi' => $this->tipe_qurban === 'Individu' ? 'nullable' : 'required|exists:kelompok_sapis,id',
             'tipe_qurban' => 'required|in:Patungan,Individu,Kambing',
             'bukti_pendaftaran' => 'nullable|image|max:2048',
         ]);
 
-        $kelompok = KelompokSapi::withCount('mudhohis')->find($this->id_kelompok_sapi);
-        if (! $this->editId && $kelompok && $kelompok->mudhohis_count >= 7) {
-            $this->addError('id_kelompok_sapi', 'Maaf, kelompok ini sudah penuh (7 Orang)!');
+        if ($this->id_kelompok_sapi) {
+            $kelompok = KelompokSapi::withCount('mudhohis')->find($this->id_kelompok_sapi);
+            if (! $this->editId && $kelompok && $kelompok->mudhohis_count >= 7) {
+                $this->addError('id_kelompok_sapi', 'Maaf, kelompok ini sudah penuh (7 Orang)!');
 
-            return;
+                return;
+            }
         }
 
         // Proses Upload Gambar Bukti
         $path = $this->existing_bukti;
         if ($this->bukti_pendaftaran) {
-            $path = Storage::disk('public')->put('bukti_qurban', $this->bukti_pendaftaran);
+            $path = $this->bukti_pendaftaran->store('bukti_qurban', 'public');
         }
 
         $kode_unik = null;
@@ -215,7 +221,12 @@ class DataMudhohi extends Component
             ->orderBy('id', 'desc')
             ->paginate(10);
 
-        $wargas = Warga::orderBy('nama', 'asc')->get();
+        $wargas = Warga::whereNotIn('id', function ($query) {
+            $query->select('id_warga')
+                ->from('mudhohis')
+                ->where('tahun', $this->tahun_aktif)
+                ->whereNotNull('id_warga');
+        })->orderBy('nama', 'asc')->get();
 
         $kelompoks = KelompokSapi::with('sapi')
             ->where('tahun', $this->tahun_aktif)
@@ -229,6 +240,6 @@ class DataMudhohi extends Component
             'mudhohis' => $mudhohis,
             'wargas' => $wargas,
             'kelompoks' => $kelompoks,
-        ])->title('Data Pendaftar (Mudhohi) | Qurban App');
+        ])->title('Data Pendaftar (Mudhohi)');
     }
 }

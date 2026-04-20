@@ -161,6 +161,6 @@ class DataSesiDistribusi extends Component
 
         return view('livewire.admin.data-sesi-distribusi', [
             'sesis' => $sesis,
-        ])->title('Sesi Distribusi | Qurban App');
+        ])->title('Sesi Distribusi');
     }
 }

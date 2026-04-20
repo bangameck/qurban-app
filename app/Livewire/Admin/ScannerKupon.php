@@ -24,8 +24,14 @@ class ScannerKupon extends Component
 
     public $message = '';
 
+    public function submitManual()
+    {
+        $this->processCode($this->scannedCode);
+    }
+
     public function processCode($code)
     {
+        $code = trim(strtoupper($code));
         $this->scannedCode = $code;
         $this->result = null;
         $this->resultType = '';
@@ -98,6 +104,6 @@ class ScannerKupon extends Component
     public function render()
     {
         return view('livewire.admin.scanner-kupon')
-            ->title('Scanner Kupon Cerdas | Qurban App');
+            ->title('Scanner Kupon Cerdas');
     }
 }

@@ -83,13 +83,15 @@ class LiveScreen extends Component
             }
 
             // 2. CEK STATUS SAPI TERBARU
-            $latestSapi = Sapi::where('updated_at', '>', $this->lastSapiTime)->latest('updated_at')->first();
+            $latestSapi = Sapi::with('kelompok')->where('updated_at', '>', $this->lastSapiTime)->latest('updated_at')->first();
             if ($latestSapi) {
                 $this->lastSapiTime = Carbon::parse($latestSapi->updated_at)->format('Y-m-d H:i:s');
                 $this->dispatch('show-sapi-popup', [
                     'kode' => $latestSapi->kode_sapi,
                     // UBAH KE status_proses
                     'status' => $latestSapi->status_proses ?? 'Telah Diupdate',
+                    'foto' => $latestSapi->path_foto_sapi ? asset('storage/'.$latestSapi->path_foto_sapi) : null,
+                    'kelompok' => $latestSapi->kelompok->nama_kelompok ?? null,
                 ]);
             }
 
@@ -106,22 +108,29 @@ class LiveScreen extends Component
         $mapKupon = function ($i, $tipe) {
             $alamatParts = [];
             if ($i->warga) {
-                if ($i->warga->alamat) $alamatParts[] = $i->warga->alamat;
+                if ($i->warga->alamat) {
+                    $alamatParts[] = $i->warga->alamat;
+                }
                 if ($i->warga->rt) {
-                    $alamatParts[] = 'RT ' . $i->warga->rt->nama_rt;
+                    $alamatParts[] = 'RT '.$i->warga->rt->nama_rt;
                     if ($i->warga->rt->rw) {
-                        $alamatParts[] = 'RW ' . $i->warga->rt->rw->nama_rw;
-                        if ($i->warga->rt->rw->kelurahan) $alamatParts[] = $i->warga->rt->rw->kelurahan;
-                        if ($i->warga->rt->rw->kecamatan) $alamatParts[] = $i->warga->rt->rw->kecamatan;
+                        $alamatParts[] = 'RW '.$i->warga->rt->rw->nama_rw;
+                        if ($i->warga->rt->rw->kelurahan) {
+                            $alamatParts[] = $i->warga->rt->rw->kelurahan;
+                        }
+                        if ($i->warga->rt->rw->kecamatan) {
+                            $alamatParts[] = $i->warga->rt->rw->kecamatan;
+                        }
                     }
                 }
             }
+
             return (object) [
                 'waktu' => $i->waktu_diambil,
                 'nama' => $i->warga->nama ?? 'Hamba Allah',
                 'tipe' => $tipe,
                 'status' => $i->status_pengambilan ?? 'Belum',
-                'alamat' => count($alamatParts) > 0 ? implode(', ', $alamatParts) : '-'
+                'alamat' => count($alamatParts) > 0 ? implode(', ', $alamatParts) : '-',
             ];
         };
 
@@ -163,6 +172,6 @@ class LiveScreen extends Component
             'kelompoks' => KelompokSapi::with(['sapi', 'mudhohis.warga'])->where('tahun', $this->tahun_aktif)->get(),
             'semuaKupon' => $daftarDistribusi,
             'settings' => AppSetting::pluck('value', 'key')->toArray(),
-        ])->title('Live Display TV | Qurban App');
+        ])->title('Live Display TV');
     }
 }

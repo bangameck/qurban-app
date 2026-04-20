@@ -28,10 +28,10 @@
     <div class="mt-8 px-4">
         <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm text-center">
             <p class="text-xs font-bold text-gray-400 uppercase mb-4 tracking-widest">Kamera error? Input Manual:</p>
-            <div class="flex gap-2">
+            <form wire:submit="submitManual" class="flex gap-2">
                 <input type="text" wire:model="scannedCode" placeholder="KODE-KUPON" class="flex-1 px-4 py-3 bg-gray-50 rounded-xl border-2 border-gray-100 focus:border-primary-500 outline-none text-center font-mono font-black text-lg uppercase">
-                <button wire:click="processCode($scannedCode)" class="px-6 py-3 bg-primary-600 text-white rounded-xl font-black shadow-lg">GAS</button>
-            </div>
+                <button type="submit" class="px-6 py-3 bg-primary-600 text-white rounded-xl font-black shadow-lg">GAS</button>
+            </form>
         </div>
     </div>
     @endif

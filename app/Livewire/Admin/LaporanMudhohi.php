@@ -45,6 +45,6 @@ class LaporanMudhohi extends Component
 
         return view('livewire.admin.laporan-mudhohi', [
             'kelompoks' => $kelompoks,
-        ])->title('Laporan Mudhohi | Qurban App');
+        ])->title('Laporan Mudhohi');
     }
 }

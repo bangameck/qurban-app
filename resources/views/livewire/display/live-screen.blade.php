@@ -107,7 +107,29 @@
         </div>
 
         <div x-show="activeSlide === 3" x-transition.opacity.duration.800ms class="absolute inset-0 flex flex-col h-full" style="display: none;">
-            <h2 class="text-3xl font-black text-white m-8 mb-4 border-l-8 border-blue-500 pl-4 shrink-0">DAFTAR DISTRIBUSI DAGING (LIVE)</h2>
+            @php
+                $scanCount = $semuaKupon->where('status', 'Sudah')->count();
+                $totalCount = $semuaKupon->count();
+                $percent = $totalCount > 0 ? round(($scanCount / $totalCount) * 100) : 0;
+            @endphp
+            <div class="flex items-center justify-between m-8 mb-4 shrink-0">
+                <div class="flex items-center gap-4 bg-gray-900/50 backdrop-blur-sm border border-gray-700 p-3 pr-6 rounded-2xl shadow-xl">
+                    <div class="bg-blue-500/20 text-blue-400 p-3 rounded-xl border border-blue-500/30">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] items-center gap-1 font-black text-gray-500 uppercase tracking-widest flex"><span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span> PROGRESS DISTRIBUSI</span>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <span class="text-3xl font-black text-white font-mono">{{ $scanCount }}</span>
+                            <span class="text-xl font-bold text-gray-500 font-mono">/ {{ $totalCount }}</span>
+                        </div>
+                    </div>
+                    <div class="ml-4 pl-6 py-2 border-l border-gray-700">
+                        <div class="text-4xl font-black text-blue-500">{{ $percent }}%</div>
+                    </div>
+                </div>
+                <h2 class="text-3xl font-black text-white border-r-8 border-blue-500 pr-4 text-right">DAFTAR DISTRIBUSI DAGING (LIVE)</h2>
+            </div>
             <div id="slide-container-3" class="flex-1 overflow-y-auto px-8 pb-10 hide-scrollbar" wire:ignore.self>
                 <div class="bg-gray-800/50 rounded-[2.5rem] overflow-hidden border border-gray-700 shadow-2xl">
                     <table class="w-full text-left">
@@ -175,35 +197,73 @@
          x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 scale-50" x-transition:enter-end="opacity-100 scale-100"
          x-transition:leave="transition ease-in duration-300 transform" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-50"
          class="fixed inset-0 z-[10000] bg-black/90 backdrop-blur-lg flex items-center justify-center p-10">
-        <div :class="{
-                'bg-gradient-to-b from-rose-600 to-rose-800 shadow-[0_0_100px_rgba(225,29,72,0.5)]': scanPopup?.tipe === 'Panitia',
-                'bg-gradient-to-b from-blue-600 to-blue-800 shadow-[0_0_100px_rgba(37,99,235,0.5)]': scanPopup?.tipe === 'Mudhohi',
-                'bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-[0_0_100px_rgba(16,185,129,0.5)]': scanPopup?.tipe === 'Mustahiq'
-             }"
-             class="rounded-[3rem] p-16 text-center w-full max-w-4xl border-4 border-white/20">
-            <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl">
-                <svg class="w-16 h-16 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
+        <template x-if="scanPopup">
+            <div :class="{
+                    'bg-gradient-to-b from-rose-600 to-rose-800 shadow-[0_0_100px_rgba(225,29,72,0.5)]': scanPopup?.tipe === 'Panitia',
+                    'bg-gradient-to-b from-blue-600 to-blue-800 shadow-[0_0_100px_rgba(37,99,235,0.5)]': scanPopup?.tipe === 'Mudhohi',
+                    'bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-[0_0_100px_rgba(16,185,129,0.5)]': scanPopup?.tipe === 'Mustahiq'
+                 }"
+                 class="rounded-[3rem] p-16 text-center w-full max-w-4xl border-4 border-white/20 relative overflow-hidden">
+                 
+                <!-- Walking Progress Bar -->
+                <div class="absolute bottom-0 left-0 h-4 bg-white/50 animate-progress-modal-6s" style="box-shadow: 0 0 20px rgba(255,255,255,0.8)"></div>
+
+                <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl relative z-10">
+                    <svg class="w-16 h-16 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h2 class="relative z-10 text-4xl font-black text-white/80 tracking-widest uppercase mb-4">KUPON BERHASIL DI-SCAN</h2>
+                <h1 class="relative z-10 text-7xl font-black text-white mb-6 uppercase" x-text="scanPopup?.nama"></h1>
+                <div class="relative z-10 inline-block bg-black/40 px-8 py-3 rounded-full border border-white/20 shadow-inner">
+                    <p class="text-3xl font-bold text-white tracking-widest font-mono"><span x-text="scanPopup?.tipe" class="font-sans"></span> • <span x-text="scanPopup?.waktu"></span></p>
+                </div>
             </div>
-            <h2 class="text-4xl font-black text-white/80 tracking-widest uppercase mb-4">KUPON BERHASIL DI-SCAN</h2>
-            <h1 class="text-7xl font-black text-white mb-6 uppercase" x-text="scanPopup?.nama"></h1>
-            <div class="inline-block bg-black/40 px-8 py-3 rounded-full border border-white/20 shadow-inner">
-                <p class="text-3xl font-bold text-white tracking-widest font-mono"><span x-text="scanPopup?.tipe" class="font-sans"></span> • <span x-text="scanPopup?.waktu"></span></p>
-            </div>
-        </div>
+        </template>
     </div>
 
     <div x-show="sapiPopup" style="display: none;" 
          x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="opacity-0 translate-y-full" x-transition:enter-end="opacity-100 translate-y-0"
          x-transition:leave="transition ease-in duration-300 transform" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-full"
          class="fixed inset-0 z-[10000] bg-black/90 backdrop-blur-lg flex items-center justify-center p-10">
-        <div class="bg-gradient-to-b from-amber-500 to-amber-700 rounded-[3rem] p-16 text-center w-full max-w-4xl shadow-[0_0_100px_rgba(245,158,11,0.5)] border-4 border-white/20">
-            <div class="w-32 h-32 bg-black/30 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl border border-white/20"><span class="text-6xl">🐄</span></div>
-            <h2 class="text-3xl font-black text-amber-100 tracking-widest uppercase mb-4">INFO UPDATE SAPI</h2>
-            <h1 class="text-8xl font-black text-white mb-6 font-mono" x-text="sapiPopup?.kode"></h1>
-            <div class="inline-block bg-white text-amber-700 px-10 py-4 rounded-full shadow-2xl">
-                <p class="text-3xl font-black tracking-widest uppercase" x-text="sapiPopup?.status"></p>
+        <template x-if="sapiPopup">
+            <div :class="{
+                    'bg-gradient-to-b from-gray-500 to-gray-700 shadow-[0_0_100px_rgba(107,114,128,0.5)]': sapiPopup?.status === 'Menunggu',
+                    'bg-gradient-to-b from-blue-600 to-blue-800 shadow-[0_0_100px_rgba(37,99,235,0.5)]': sapiPopup?.status === 'Disembelih',
+                    'bg-gradient-to-b from-amber-500 to-amber-700 shadow-[0_0_100px_rgba(245,158,11,0.5)]': sapiPopup?.status === 'Dikuliti',
+                    'bg-gradient-to-b from-emerald-500 to-emerald-700 shadow-[0_0_100px_rgba(16,185,129,0.5)]': sapiPopup?.status === 'Selesai',
+                 }"
+                 class="rounded-[3rem] p-16 text-center w-full max-w-4xl border-4 border-white/20 relative overflow-hidden">
+                 
+                <!-- Walking Progress Bar -->
+                <div class="absolute bottom-0 left-0 h-4 bg-white/50 animate-progress-modal-5s" style="box-shadow: 0 0 20px rgba(255,255,255,0.8)"></div>
+
+                <div class="relative z-10 w-full flex flex-col items-center">
+                    <template x-if="sapiPopup?.foto">
+                        <div class="w-48 h-48 rounded-[2rem] overflow-hidden mx-auto mb-8 shadow-2xl border-4 border-white/30 bg-black/30">
+                            <img :src="sapiPopup.foto" class="w-full h-full object-cover">
+                        </div>
+                    </template>
+                    <template x-if="!sapiPopup?.foto">
+                        <div class="w-32 h-32 bg-black/30 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl border border-white/20"><span class="text-6xl">🐄</span></div>
+                    </template>
+                    <h2 class="text-3xl font-black text-white tracking-widest uppercase mb-4 opacity-90">INFO UPDATE SAPI</h2>
+                    <h1 class="text-8xl font-black text-white mb-2 font-mono" x-text="sapiPopup?.kode"></h1>
+                    <template x-if="sapiPopup?.kelompok">
+                        <p class="text-2xl font-bold text-gray-300 mb-6 uppercase tracking-widest" x-text="'Milik ' + sapiPopup.kelompok"></p>
+                    </template>
+                    <template x-if="!sapiPopup?.kelompok">
+                        <div class="mb-6"></div>
+                    </template>
+                    <div class="inline-block bg-white text-gray-900 px-10 py-4 rounded-full shadow-2xl" :class="{
+                        'text-gray-700': sapiPopup?.status === 'Menunggu',
+                        'text-blue-700': sapiPopup?.status === 'Disembelih',
+                        'text-amber-700': sapiPopup?.status === 'Dikuliti',
+                        'text-emerald-700': sapiPopup?.status === 'Selesai'
+                    }">
+                        <p class="text-3xl font-black tracking-widest uppercase" x-text="sapiPopup?.status"></p>
+                    </div>
+                </div>
             </div>
-        </div>
+        </template>
     </div>
 
 </div>
@@ -331,4 +391,10 @@
 <style>
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    @keyframes progressBarWalking {
+        0% { width: 100%; }
+        100% { width: 0%; }
+    }
+    .animate-progress-modal-6s { animation: progressBarWalking 6.3s linear forwards; }
+    .animate-progress-modal-5s { animation: progressBarWalking 5.3s linear forwards; }
 </style>

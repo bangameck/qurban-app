@@ -64,6 +64,6 @@ class LaporanPanitia extends Component
             'corePanitia' => $corePanitia,
             'groupPanitia' => $groupPanitia,
             'kelompoks' => $kelompoks,
-        ])->title('Laporan Struktur Panitia | Qurban App');
+        ])->title('Laporan Struktur Panitia');
     }
 }

@@ -19,15 +19,20 @@ class DataKelompokSapi extends Component
     public $search = '';
 
     public $isModalOpen = false;
+
     public $isDeleteModalOpen = false;
+
     public $isDetailModalOpen = false; // Modal Detail Anggota
 
     public $editId = null;
+
     public $deleteId = null;
+
     public $detailKelompok = null; // Menyimpan data kelompok yang diklik
 
     // Form Properties
     public $nama_kelompok;
+
     public $id_sapi;
 
     // Multi Tahun
@@ -48,7 +53,6 @@ class DataKelompokSapi extends Component
     {
         return [
             'nama_kelompok.required' => 'Nama kelompok wajib diisi!',
-            'id_sapi.required' => 'Wajib memilih Sapi!',
             'id_sapi.unique' => 'Sapi ini sudah terdaftar di kelompok lain!',
         ];
     }
@@ -100,14 +104,14 @@ class DataKelompokSapi extends Component
     {
         $this->validate([
             'nama_kelompok' => 'required|string|max:255',
-            'id_sapi' => 'required|exists:sapis,id|unique:kelompok_sapis,id_sapi,'.$this->editId,
+            'id_sapi' => 'nullable|exists:sapis,id|unique:kelompok_sapis,id_sapi,'.$this->editId,
         ]);
 
         KelompokSapi::updateOrCreate(
             ['id' => $this->editId],
             [
                 'nama_kelompok' => $this->nama_kelompok,
-                'id_sapi' => $this->id_sapi,
+                'id_sapi' => $this->id_sapi ?: null,
                 'tahun' => $this->tahun_aktif, // Tambahkan Simpan Tahun Aktif
             ]
         );
@@ -141,9 +145,9 @@ class DataKelompokSapi extends Component
             ->where('tahun', $this->tahun_aktif) // FILTER TAHUN
             ->where(function ($q) {
                 $q->where('nama_kelompok', 'like', '%'.$this->search.'%')
-                  ->orWhereHas('sapi', function ($sq) {
-                      $sq->where('kode_sapi', 'like', '%'.$this->search.'%');
-                  });
+                    ->orWhereHas('sapi', function ($sq) {
+                        $sq->where('kode_sapi', 'like', '%'.$this->search.'%');
+                    });
             })
             ->orderBy('id', 'desc')
             ->paginate(10);
@@ -160,6 +164,6 @@ class DataKelompokSapi extends Component
         return view('livewire.admin.data-kelompok-sapi', [
             'kelompoks' => $kelompoks,
             'sapiTersedia' => $sapiTersedia,
-        ])->title('Kelompok Sapi | Qurban App');
+        ])->title('Kelompok Sapi');
     }
 }

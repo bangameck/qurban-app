@@ -52,7 +52,11 @@
                                         </div>
                                     </div>
                                 @else
-                                    <span class="text-red-400 italic text-xs font-bold">Sapi Terhapus</span>
+                                    @if(is_null($kelompok->id_sapi))
+                                        <span class="text-gray-400 italic text-xs font-bold">Belum Ditentukan</span>
+                                    @else
+                                        <span class="text-red-400 italic text-xs font-bold">Sapi Terhapus</span>
+                                    @endif
                                 @endif
                             </td>
                             <td class="px-6 py-4">

@@ -5,6 +5,7 @@ namespace App\Livewire\Public;
 use App\Models\AppSetting;
 use App\Models\Mudhohi;
 use App\Models\Mustahiq;
+use App\Models\Panitia;
 use App\Models\Sapi;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -31,11 +32,22 @@ class Home extends Component
         $this->stats['total_sapi'] = Sapi::where('tahun', $this->tahun_aktif)->count();
         $this->stats['sapi_disembelih'] = Sapi::where('tahun', $this->tahun_aktif)->where('status_proses', 'Selesai')->count();
         $this->stats['total_mudhohi'] = Mudhohi::where('tahun', $this->tahun_aktif)->count();
-        $this->stats['daging_tersalurkan'] = Mustahiq::where('tahun', $this->tahun_aktif)->where('status_pengambilan', 'Sudah')->count();
+
+        // Hitung total kupon secara keseluruhan (Mustahiq + Mudhohi + Panitia)
+        $countMustahiq = Mustahiq::where('tahun', $this->tahun_aktif)->count();
+        $countMudhohi = Mudhohi::where('tahun', $this->tahun_aktif)->whereNotNull('kode_unik_kupon')->count();
+        $countPanitia = Panitia::where('tahun', $this->tahun_aktif)->whereNotNull('kode_unik_kupon')->count();
+        $this->stats['kupon_total'] = $countMustahiq + $countMudhohi + $countPanitia;
+
+        // Hitung kupon yang sudah diambil
+        $scanMustahiq = Mustahiq::where('tahun', $this->tahun_aktif)->where('status_pengambilan', 'Sudah')->count();
+        $scanMudhohi = Mudhohi::where('tahun', $this->tahun_aktif)->where('status_pengambilan', 'Sudah')->count();
+        $scanPanitia = Panitia::where('tahun', $this->tahun_aktif)->where('status_pengambilan', 'Sudah')->count();
+        $this->stats['kupon_scan'] = $scanMustahiq + $scanMudhohi + $scanPanitia;
     }
 
     public function render()
     {
-        return view('livewire.public.home')->title('Beranda | '.$this->app_name);
+        return view('livewire.public.home')->title('Beranda Publik');
     }
 }
