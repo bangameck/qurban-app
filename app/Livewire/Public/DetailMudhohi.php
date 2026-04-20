@@ -5,11 +5,18 @@ namespace App\Livewire\Public;
 use App\Models\AppSetting;
 use App\Models\Mudhohi;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
-#[Layout('components.layouts.public')] // Menggunakan layout utama yang sudah support CSS Variable Theme Color
+#[Layout('components.layouts.public')]
+#[Lazy]
 class DetailMudhohi extends Component
 {
+    public function placeholder()
+    {
+        return view('components.skeleton.public._details-mudhohi');
+    }
+
     public $mudhohi;
 
     public $appName;
@@ -32,6 +39,7 @@ class DetailMudhohi extends Component
 
     public function render()
     {
+        usleep(200000);
         return view('livewire.public.detail-mudhohi')->title('Tanda Terima Qurban - '.$this->mudhohi->warga->nama);
     }
 }

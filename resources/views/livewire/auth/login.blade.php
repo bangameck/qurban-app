@@ -1,9 +1,17 @@
-<div class="bg-white p-8 rounded-3xl shadow-2xl border border-gray-100 relative z-10">
-    <div class="text-center mb-8 flex flex-col items-center">
+<div class="bg-white p-8 rounded-3xl shadow-2xl border border-gray-100 relative z-10 overflow-hidden">
 
-        @if (file_exists(public_path('logo.png')))
+    @if(!empty($globalSettings['banner_image']) && file_exists(public_path('storage/'.$globalSettings['banner_image'])))
+    <div class="absolute -top-10 -right-10 w-64 h-64 z-0 pointer-events-none opacity-[0.15]"
+        style="mask-image: radial-gradient(circle at top right, black, transparent 70%); -webkit-mask-image: radial-gradient(circle at top right, black, transparent 70%);">
+        <img src="{{ asset('storage/'.$globalSettings['banner_image']) }}?v={{ time() }}" alt="Watermark Banner"
+            class="w-full h-full object-cover rounded-bl-full">
+    </div>
+    @endif
+
+    <div class="text-center mb-8 flex flex-col items-center relative z-10">
+        @if ($logoUrl)
         <div class="mb-4">
-            <img src="{{ asset('logo.png') }}?v={{ time() }}" alt="Logo App"
+            <img src="{{ $logoUrl }}?v={{ time() }}" alt="Logo App"
                 class="w-20 h-auto object-contain mx-auto drop-shadow-sm">
         </div>
         @else
@@ -22,7 +30,7 @@
             }}</p>
     </div>
 
-    <form wire:submit="authenticate" class="space-y-5">
+    <form wire:submit="authenticate" class="space-y-5 relative z-10">
 
         <div>
             <label class="block text-sm font-bold text-gray-700 mb-2">Nomor WhatsApp</label>

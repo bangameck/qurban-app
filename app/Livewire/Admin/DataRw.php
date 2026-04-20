@@ -36,7 +36,7 @@ class DataRw extends Component
 
     public function placeholder()
     {
-        return view('components.skeleton._rt_rw'); // Bisa disesuaikan jika ada skeleton khusus
+        return view('components.skeleton._rt_rw');
     }
 
     public function updatingSearch()
@@ -149,6 +149,7 @@ class DataRw extends Component
 
     public function render()
     {
+        usleep(200000); // 0.2 detik jeda agar skeleton terlihat
         $rws = Rw::with('pejabat')
             ->where('nama_rw', 'like', '%'.$this->search.'%')
             ->orWhereHas('pejabat', function ($q) {

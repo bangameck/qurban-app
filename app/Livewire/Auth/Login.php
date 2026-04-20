@@ -6,11 +6,18 @@ use App\Models\Warga;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Layout('components.layouts.auth')]
+#[Lazy]
 class Login extends Component
 {
+    public function placeholder()
+    {
+        return view('components.skeleton._login');
+    }
+
     public $phone_number = '';
 
     public $password = '';
@@ -83,6 +90,7 @@ class Login extends Component
 
     public function render()
     {
+        usleep(200000);
         return view('livewire.auth.login')->title('Login Masuk');
     }
 }

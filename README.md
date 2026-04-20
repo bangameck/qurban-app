@@ -1,58 +1,108 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🐂 Qurban App - Smart Qurban & Distribution Management
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![Livewire](https://img.shields.io/badge/Livewire-4E56A6?style=for-the-badge&logo=livewire&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Alpine.js](https://img.shields.io/badge/Alpine.js-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=white)
 
-## About Laravel
+**Qurban App** adalah sistem manajemen operasional Qurban modern yang dirancang untuk memudahkan Panitia dalam mengelola data Mudhohi, pembagian Kelompok Sapi, hingga manajemen distribusi daging kepada Mustahiq secara presisi dan transparan.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Dibangun dengan antarmuka **Premium Glassmorphism** yang interaktif, aplikasi ini memastikan seluruh proses ibadah Qurban terdokumentasi dengan baik dan berjalan secara efisien.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ✨ Fitur Unggulan
 
-## Learning Laravel
+### 📊 1. Dashboard Monitoring Real-Time
+- Visualisasi data pendaftar Qurban (Sapi & Kambing).
+- Progres penyembelihan dan distribusi daging secara langsung.
+- **Dynamic Greeting:** Menyapa admin berdasarkan waktu (Pagi/Siang/Sore).
+- **Banner Background:** Dashboard yang bisa di-custom tampilannya langsung dari pengaturan.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 🔍 2. Smart Scanner Kupon (QR Code)
+- Verifikasi pengambilan daging menggunakan kamera HP/Laptop secara instan.
+- **Multi-Role Detection:** Otomatis mendeteksi apakah pemegang kupon adalah Mudhohi, Mustahiq, atau Panitia.
+- Validasi status pengambilan untuk mencegah pengambilan ganda.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🐂 3. Manajemen Hewan & Kelompok Qurban
+- Pengaturan kelompok sapi (7 orang per kelompok) secara otomatis atau manual.
+- Data detail hewan qurban dilengkapi dengan foto progress penyembelihan.
+- Cetak Sertifikat Qurban otomatis dengan tanda tangan pejabat terkait.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### 🖼️ 4. Pengaturan Tampilan & Banner (Smart Image Handling)
+- **Auto-Compression:** Upload Logo dan Banner otomatis dikompres di sisi client menggunakan *Canvas API* hingga di bawah 100KB untuk menghemat storage.
+- **Auto-Crop Banner:** Fitur pemotongan gambar otomatis (Center Crop) agar banner selalu tampil proporsional di layar Login dan Dashboard.
+- **Theme Color Sync:** Warna tema aplikasi (Emerald, Blue, Rose, Amber) dapat diubah secara instan melalui panel admin.
 
-## Agentic Development
+### 📱 5. Integrasi WhatsApp (WA Gateway)
+- Notifikasi otomatis kepada Mudhohi saat hewan sudah disembelih.
+- Pengiriman informasi pengambilan daging melalui integrasi **Fonnte**.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 🦴 6. Manajemen Distribusi & Sesi
+- Pengaturan sesi pengambilan daging untuk mengurai antrian warga.
+- Data warga (RT/RW) terintegrasi untuk akurasi sasaran penerima daging (Mustahiq).
 
-```bash
-composer require laravel/boost --dev
+---
 
-php artisan boost:install
-```
+## 🛠️ Stack Teknologi
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+- **Framework Backend:** Laravel 11+
+- **Frontend Stack:** Livewire 3 (Full-page components), Alpine.js (Client-side compression & interactions)
+- **Styling:** Tailwind CSS (Custom Color Palettes, Glassmorphism UI)
+- **Database:** MySQL
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🚀 Panduan Instalasi
 
-## Code of Conduct
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/bangameck/qurban-app-radevanka.git
+   cd qurban-app-radevanka
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. **Install Dependency**
+   ```bash
+   composer install
+   npm install
+   npm run build
+   ```
 
-## Security Vulnerabilities
+3. **Konfigurasi Environment**
+   Salin file `.env.example` menjadi `.env` lalu sesuaikan konfigurasi database Anda.
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. **Migrasi Database & Seeder**
+   ```bash
+   php artisan migrate --seed
+   ```
 
-## License
+5. **Link Storage (Penting)**
+   ```bash
+   php artisan storage:link
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+6. **Jalankan Aplikasi**
+   ```bash
+   php artisan serve
+   ```
+
+---
+
+## 👨‍💻 Dikembangkan Oleh
+
+**RadevankaProject**
+<br>
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Work+Sans&weight=800&size=18&pause=1000&color=10B981&vCenter=true&width=600&lines=Digitalisasi+Manajemen+Qurban+Modern;Developer:+@bangameck;Lokasi:+Pekanbaru,+Riau)](https://git.io/typing-svg)
+
+- 🧑‍💻 **Developer:** [@bangameck](https://instagram.com/bangameck)
+- 📍 **Lokasi:** Pekanbaru, Riau, Indonesia 🇮🇩
+- 🎯 **Visi:** *Memudahkan umat dalam ibadah melalui teknologi.*
+
+---
+
+## 📄 Lisensi
+Hak Cipta &copy; 2026 **Qurban App Radevanka**. Seluruh hak cipta dilindungi.

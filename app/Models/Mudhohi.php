@@ -14,6 +14,10 @@ class Mudhohi extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'waktu_diambil' => 'datetime',
+    ];
+
     public function warga()
     {
         return $this->belongsTo(Warga::class, 'id_warga');

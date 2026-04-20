@@ -7,7 +7,7 @@
 
   <div
     class="h-20 flex items-center justify-center gap-3 px-6 bg-primary-900/40 backdrop-blur-md border-b border-white/10 shrink-0 relative z-10">
-    <img src="{{ asset('logo.png') }}" class="w-10 h-10 rounded-xl shadow-lg ring-2 ring-primary-500/50"
+    <img src="{{ $logoUrl }}" class="w-10 h-10 rounded-xl shadow-lg ring-2 ring-primary-500/50"
       onerror="this.src='https://ui-avatars.com/api/?name={{ urlencode($globalSettings['app_name'] ?? 'Qurban') }}&background=0d9488&color=fff'">
     <span class="font-bold text-xl tracking-wider truncate">{{ $globalSettings['app_name'] ?? 'QURBAN APP' }}</span>
     <button @click="sidebarOpen = false"

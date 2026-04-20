@@ -139,6 +139,7 @@ class DataKelompokSapi extends Component
 
     public function render()
     {
+        usleep(200000);
         // 1. Ambil data Kelompok + Relasi Sapi (Filter Tahun Aktif)
         $kelompoks = KelompokSapi::with('sapi')
             ->withCount('mudhohis')

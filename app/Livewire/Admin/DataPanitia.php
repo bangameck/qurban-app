@@ -21,6 +21,7 @@ class DataPanitia extends Component
     use WithPagination;
 
     public $search = '';
+    public $perPage = 12;
 
     public $isModalOpen = false;
 
@@ -29,6 +30,12 @@ class DataPanitia extends Component
     public $editId = null;
 
     public $deleteId = null;
+
+    public $isListModalOpen = false;
+
+    public $selectedKelompok = null;
+
+    public $panitiaKelompok = [];
 
     // Form Properties
     public $id_warga;
@@ -47,15 +54,33 @@ class DataPanitia extends Component
 
     public function placeholder()
     {
-        return view('components.skeleton._sesi');
+        return view('components.skeleton._panitia');
+    }
+
+    public function updatingSearch()
+    {
+        $this->perPage = 12;
+        $this->resetPage();
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += 12;
     }
 
     public function openModal($id = null)
     {
         $this->resetForm();
         if ($id) {
-            $this->editId = $id;
             $data = Panitia::find($id);
+            
+            // Proteksi: Jika sudah diambil, tidak boleh edit
+            if ($data && $data->status_pengambilan == 'Sudah') {
+                $this->dispatch('notify-error', 'Maaf, data yang sudah mengambil jatah tidak dapat diubah!');
+                return;
+            }
+
+            $this->editId = $id;
             $this->id_warga = $data->id_warga;
             $this->jabatan = $data->jabatan;
             $this->id_kelompok_sapi = $data->id_kelompok_sapi;
@@ -113,6 +138,13 @@ class DataPanitia extends Component
     {
         $data = Panitia::find($this->deleteId);
         if ($data) {
+            // Proteksi: Jika sudah diambil, tidak boleh hapus
+            if ($data->status_pengambilan == 'Sudah') {
+                $this->dispatch('notify-error', 'Gagal! Data panitia yang sudah mengambil jatah tidak boleh dihapus.');
+                $this->isDeleteModalOpen = false;
+                return;
+            }
+
             if ($data->path_qr_code) {
                 Storage::disk('public')->delete($data->path_qr_code);
             }
@@ -122,17 +154,38 @@ class DataPanitia extends Component
         $this->isDeleteModalOpen = false;
     }
 
+    public function openListModal($id_kelompok)
+    {
+        $this->selectedKelompok = KelompokSapi::find($id_kelompok);
+        
+        $allPanitia = Panitia::with('warga')
+            ->where('id_kelompok_sapi', $id_kelompok)
+            ->where('tahun', $this->tahun_aktif)
+            ->get();
+
+        // Pisahkan Ketua dan Anggota
+        $this->panitiaKelompok = [
+            'ketua' => $allPanitia->where('jabatan', 'Ketua Kelompok Qurban'),
+            'anggota' => $allPanitia->where('jabatan', 'Anggota Kelompok Qurban')
+        ];
+
+        $this->isListModalOpen = true;
+    }
+
     public function render()
     {
+        usleep(200000);
         // 1. Load Data Panitia
-        $panitias = Panitia::with(['warga', 'kelompokSapi'])
+        $panitias = Panitia::with(['warga.rt.rw', 'kelompokSapi'])
             ->where('tahun', $this->tahun_aktif)
             ->whereHas('warga', function ($q) {
                 $q->where('nama', 'like', '%'.$this->search.'%')
-                    ->orWhere('nik', 'like', '%'.$this->search.'%');
+                    ->orWhere('nik', 'like', '%'.$this->search.'%')
+                    ->orWhere('phone_number', 'like', '%'.$this->search.'%');
             })
+            ->orWhere('kode_unik_kupon', 'like', '%'.$this->search.'%')
             ->latest()
-            ->paginate(10);
+            ->paginate($this->perPage);
 
         // 2. Filter Warga: Jangan munculkan yang sudah jadi panitia di tahun ini
         // Tapi kalau lagi EDIT, id_warga yang sedang diedit harus tetap muncul biar tidak kosong

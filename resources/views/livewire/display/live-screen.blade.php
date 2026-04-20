@@ -4,8 +4,8 @@
 
     <div class="h-24 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-10 shadow-2xl relative z-20 shrink-0">
         <div class="flex items-center gap-5">
-            @if(isset($settings['logo']) && file_exists(public_path('storage/'.$settings['logo'])))
-                <img src="{{ asset('storage/'.$settings['logo']) }}" class="w-14 h-14 object-contain">
+            @if($logoUrl)
+                <img src="{{ $logoUrl }}" class="w-14 h-14 object-contain">
             @else
                 <div class="text-4xl">🕌</div>
             @endif

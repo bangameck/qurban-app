@@ -41,6 +41,7 @@ class AdminDashboard extends Component
         // 1. Ambil Setting Tahun Aktif
         $settings = AppSetting::pluck('value', 'key')->toArray();
         $this->tahun_aktif = $settings['tahun'] ?? date('Y');
+        usleep(200000);
 
         // 2. Setup Greeting Card Otomatis
         $hour = date('H');
@@ -153,6 +154,7 @@ class AdminDashboard extends Component
 
     public function render()
     {
+
         return view('livewire.admin.dashboard')->title('Dashboard');
     }
 }

@@ -5,12 +5,19 @@ namespace App\Livewire\Admin;
 use App\Models\AppSetting;
 use App\Models\Rab;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Layout('components.layouts.app')]
+#[Lazy]
 class DataRab extends Component
 {
     public $tahun_aktif;
+
+    public function placeholder()
+    {
+        return view('components.skeleton._rab');
+    }
 
     // Array untuk menampung baris inputan (seperti Excel)
     public $rows = [];
@@ -109,6 +116,7 @@ class DataRab extends Component
 
     public function render()
     {
+        usleep(200000);
         // Hitung Summary buat di Header
         $totalPemasukan = collect($this->rows)->where('jenis', 'Pemasukan')->sum('total');
         $totalPengeluaran = collect($this->rows)->where('jenis', 'Pengeluaran')->sum('total');

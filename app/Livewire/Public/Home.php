@@ -8,11 +8,18 @@ use App\Models\Mustahiq;
 use App\Models\Panitia;
 use App\Models\Sapi;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
-#[Layout('components.layouts.public')] // Pastikan sampeyan punya layout guest, atau pakai 'components.layouts.app' jika desain headernya nyambung
+#[Layout('components.layouts.public')]
+#[Lazy]
 class Home extends Component
 {
+    public function placeholder()
+    {
+        return view('components.skeleton._home');
+    }
+
     public $tahun_aktif;
 
     public $app_name;
@@ -48,6 +55,7 @@ class Home extends Component
 
     public function render()
     {
+        usleep(200000);
         return view('livewire.public.home')->title('Beranda Publik');
     }
 }

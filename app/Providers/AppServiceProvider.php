@@ -26,9 +26,16 @@ class AppServiceProvider extends ServiceProvider
 
             // Bagikan ke semua view Blade
             View::share('globalSettings', $globalSettings);
+
+            // Logika Logo & Favicon fleksibel (Cek storage dulu baru public)
+            $logoUrl = file_exists(public_path('storage/logo.png')) ? asset('storage/logo.png') : asset('logo.png');
+            $faviconUrl = file_exists(public_path('storage/favicon.ico')) ? asset('storage/favicon.ico') : asset('favicon.ico');
+            
+            View::share('logoUrl', $logoUrl);
+            View::share('faviconUrl', $faviconUrl);
         }
         if (config('app.env') !== 'local' || isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
-            URL::forceScheme('https');
+            \Illuminate\Support\Facades\URL::forceScheme('https');
         }
     }
 }

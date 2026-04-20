@@ -27,11 +27,12 @@ class LaporanMudhohi extends Component
 
     public function placeholder()
     {
-        return view('components.skeleton._default');
+        return view('components.skeleton._laporan');
     }
 
     public function render()
     {
+        usleep(200000);
         $kelompoks = KelompokSapi::with(['mudhohis.warga', 'sapi'])
             ->where('tahun', $this->tahun_aktif)
             ->where(function ($query) {

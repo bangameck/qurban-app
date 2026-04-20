@@ -152,6 +152,7 @@ class DataSesiDistribusi extends Component
 
     public function render()
     {
+        usleep(200000);
         // Filter tabel pakai Tahun Aktif
         $sesis = SesiDistribusi::withCount('mustahiqs')
             ->where('tahun', $this->tahun_aktif) // FILTER TAHUN

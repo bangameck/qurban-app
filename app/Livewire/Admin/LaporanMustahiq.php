@@ -27,11 +27,12 @@ class LaporanMustahiq extends Component
 
     public function placeholder()
     {
-        return view('components.skeleton._default'); // Pakai skeleton dashboard aja biar cepet
+        return view('components.skeleton._laporan');
     }
 
     public function render()
     {
+        usleep(200000);
         // Cari Sesi, atau cari Warga di dalam Sesi tersebut
         $sesis = SesiDistribusi::with(['mustahiqs.warga'])
             ->where('tahun', $this->tahun_aktif)

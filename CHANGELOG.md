@@ -1,24 +1,40 @@
-# Changelog
+# Changelog - Qurban App Radevanka
 
-All notable changes to this project will be documented in this file.
+Seluruh perubahan signifikan pada proyek ini akan didokumentasikan di file ini.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+---
 
-## [1.0.0] - 2026-04-15
+## [v1.2.0] - 2026-04-20
+### ✨ Added (Fitur Baru)
+- **Premium Skeleton System:** Implementasi *high-fidelity skeleton* (custom placeholder) untuk seluruh modul (Grid, Tabel, Dashboard, Settings, Scanner) agar transisi loading terasa sangat premium.
+- **Lazy Loading Implementation:** Integrasi atribut `#[Lazy]` pada semua komponen Livewire Admin & Publik untuk optimasi *initial load*.
+- **Smart Image Handling (Client-Side):**
+    - Fitur kompresi gambar otomatis menggunakan *Canvas API* sebelum upload (maks 100KB).
+    - Fitur **Auto-Crop Banner** (Center Crop) untuk memastikan banner dashboard & login tampil proporsional.
+- **Custom Dashboard Banner:** Admin kini dapat mengganti background banner Dashboard dan halaman Login langsung dari menu Pengaturan.
+- **Premium Auth UI:** Perombakan total halaman Login dengan efek *Glassmorphism*, *Blob Animations*, dan *Watermark Banner*.
+- **Project Documentation:** Penambahan file `README.md` premium dan `LICENSE.md` dengan lisensi khusus RadevankaProject.
 
-### Added
-- **Core Entity Management:** 
-  - Management modules for Warga, RT, RW, and Panitia.
-  - Sapi (Cow) & Kelompok Sapi (Cow Group) management with current weight and slaughter status tracking.
-  - Flexible distribution system classifying receivers into Mustahiq (QBN), Mudhohi (MDH), and Panitia (PQR).
-- **Live Display Interface:** 
-  - Real-time Dashboard "Live Screen TV" built with Livewire and Alpine.js.
-  - Auto-scrolling carousel showcasing live animal slaughter progress, grouped mudhohi data, and live distribution queue (full addresses included).
-  - Web Audio API and Speech Synthesis integration for automated localized scanning announcements.
-  - Robust auto-scroll behavior resistant to DOM-interrupting live-reloads with intelligent frame-skipping speeds.
-- **Scanner & QR Integration:**
-  - Generated QR Codes tied directly to the database for individual coupons and ID Cards.
-  - Live scanning interfaces updating real-time global dashboards.
-- **PDF Generation & Export:**
-  - Printable designs for Panitia ID Cards, Public Distribution Coupons, and Official Certificates.
+### 🛠️ Changed (Perubahan)
+- **Layout Modernization:** Pembaruan grid dan spacing pada hampir seluruh halaman administratif (Data Sapi, Mudhohi, Mustahiq, RAB, dll).
+- **UX Refinement:** Penambahan jeda halus (`usleep`) pada proses render untuk mempertegas efek loading skeleton yang elegan.
+- **Admin Dashboard Layout:** Integrasi banner background dan perbaikan tata letak kotak informasi statistik.
+
+### 🐞 Fixed (Perbaikan)
+- Perbaikan error `View not found` pada referensi skeleton di komponen `AppSetting`.
+- Perbaikan masalah *layout shift* (tumpang tindih) pada skeleton di layout utama.
+- Perbaikan bug sinkronisasi cache warna tema (`global_settings`).
+
+---
+
+## [v1.1.0] - Sebelumnya
+### ✨ Added
+- Integrasi WhatsApp Gateway (Fonnte).
+- Sistem Kelompok Sapi Otomatis.
+- Scanner Kupon terintegrasi kamera.
+- Cetak Sertifikat Qurban PDF.
+
+---
+
+## [v1.0.0] - Rilis Awal
+- Initial release sistem manajemen Qurban Radevanka.

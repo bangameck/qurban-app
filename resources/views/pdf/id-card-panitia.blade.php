@@ -215,9 +215,15 @@
                                 <div class="card-header-integrated">
                                     <div class="gold-accent-header"></div>
                                     
-                                    {{-- Mengambil logo secara spesifik dari public/logo.png --}}
-                                    @if(file_exists(public_path('logo.png')))
-                                        <img src="{{ public_path('logo.png') }}" class="logo-masjid">
+                                    {{-- Mengambil logo secara spesifik dari storage atau public --}}
+                                    @php
+                                        $logoPath = file_exists(public_path('storage/logo.png')) 
+                                            ? public_path('storage/logo.png') 
+                                            : (file_exists(public_path('logo.png')) ? public_path('logo.png') : null);
+                                    @endphp
+
+                                    @if($logoPath)
+                                        <img src="{{ $logoPath }}" class="logo-masjid">
                                     @else
                                         <div style="font-size: 22px; color: #fde68a; margin-bottom: 2px; position: relative; z-index: 10;">⚔️🕌</div>
                                     @endif

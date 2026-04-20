@@ -23,6 +23,7 @@ class DataWarga extends Component
     use WithPagination;
 
     public $search = '';
+    public $perPage = 12;
 
     public $isModalOpen = false;
 
@@ -63,7 +64,13 @@ class DataWarga extends Component
 
     public function updatingSearch()
     {
+        $this->perPage = 12;
         $this->resetPage();
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += 12;
     }
 
     // Custom Pesan Validasi Bahasa Indonesia
@@ -242,10 +249,14 @@ class DataWarga extends Component
     {
         $listRt = Rt::all();
 
-        $wargas = Warga::where('nama', 'like', '%'.$this->search.'%')
-            ->orWhere('nik', 'like', '%'.$this->search.'%')
+        $wargas = Warga::with(['rt.rw'])
+            ->where(function($q) {
+                $q->where('nama', 'like', '%'.$this->search.'%')
+                  ->orWhere('nik', 'like', '%'.$this->search.'%')
+                  ->orWhere('phone_number', 'like', '%'.$this->search.'%');
+            })
             ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->paginate($this->perPage);
 
         return view('livewire.admin.data-warga', [
             'wargas' => $wargas,

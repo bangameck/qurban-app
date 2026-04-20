@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin;
 
 use App\Jobs\SendWhatsappKuponJob;
-use App\Models\Mudhohi;
 use App\Models\Mustahiq;
 use App\Models\SesiDistribusi;
 use App\Models\Warga;
@@ -23,11 +22,11 @@ class DataMustahiq extends Component
 
     public $search = '';
 
+    public $perPage = 12;
+
     public $isModalOpen = false;
 
     public $isDeleteModalOpen = false;
-
-    public $isDetailModalOpen = false;
 
     public $deleteId = null;
 
@@ -38,14 +37,20 @@ class DataMustahiq extends Component
 
     public $kategori_penerima = 'Mustahiq';
 
-    // Detail Properties
-    public $detailData = null;
-
-    public $detailSapi = null; // Khusus kalau dia Mudhohi
-
     public function placeholder()
     {
-        return view('components.skeleton._sesi'); // Pakai skeleton sesi aja karena mirip tabelnya
+        return view('components.skeleton._mustahiq');
+    }
+
+    public function updatingSearch()
+    {
+        $this->perPage = 12;
+        $this->resetPage();
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += 12;
     }
 
     public function generateUniqueCode()
@@ -68,19 +73,6 @@ class DataMustahiq extends Component
     {
         $this->isModalOpen = false;
         $this->resetForm();
-    }
-
-    public function closeDetailModal()
-    {
-        // Tutup modal
-        $this->isDetailModalOpen = false;
-
-        // Bersihkan data biar memori enteng
-        $this->detailData = null;
-        $this->detailSapi = null;
-
-        // Karena ini lari ke server, Livewire otomatis akan menjalankan fungsi render() lagi
-        // yang artinya tabel di belakang layar langsung nge-refresh narik data terbaru!
     }
 
     public function resetForm()
@@ -138,21 +130,7 @@ class DataMustahiq extends Component
     }
 
     // --- FITUR DETAIL ---
-    public function openDetailModal($id)
-    {
-        $this->detailData = Mustahiq::with(['warga', 'sesiDistribusi', 'panitiaScanner'])->find($id);
-
-        // Cek apakah dia Mudhohi, kalau iya cari data Sapinya
-        $this->detailSapi = null;
-        if ($this->detailData->kategori_penerima == 'Mudhohi') {
-            $mudhohiRecord = Mudhohi::with('kelompokSapi.sapi')->where('id_warga', $this->detailData->id_warga)->first();
-            if ($mudhohiRecord && $mudhohiRecord->kelompokSapi) {
-                $this->detailSapi = $mudhohiRecord->kelompokSapi->sapi;
-            }
-        }
-
-        $this->isDetailModalOpen = true;
-    }
+    // Dialihkan ke route kupon.detail langsung dari view
 
     // --- FITUR DELETE ---
     public function confirmDelete($id)
@@ -165,6 +143,14 @@ class DataMustahiq extends Component
     {
         $mustahiq = Mustahiq::find($this->deleteId);
         if ($mustahiq) {
+            // Proteksi: Jika sudah diambil, tidak boleh hapus
+            if ($mustahiq->status_pengambilan == 'Sudah') {
+                $this->dispatch('notify-error', 'Gagal! Kupon yang sudah digunakan/diambil tidak boleh dihapus.');
+                $this->isDeleteModalOpen = false;
+
+                return;
+            }
+
             // Hapus file QR Code-nya sekalian biar storage nggak penuh
             if ($mustahiq->path_qr_code && Storage::disk('public')->exists($mustahiq->path_qr_code)) {
                 Storage::disk('public')->delete($mustahiq->path_qr_code);
@@ -178,12 +164,16 @@ class DataMustahiq extends Component
 
     public function render()
     {
-        $mustahiqs = Mustahiq::with(['warga', 'sesiDistribusi'])
+        usleep(200000);
+        $mustahiqs = Mustahiq::with(['warga.rt.rw', 'sesiDistribusi'])
             ->whereHas('warga', function ($q) {
                 $q->where('nama', 'like', "%{$this->search}%")
-                    ->orWhere('kode_unik_kupon', 'like', "%{$this->search}%");
+                    ->orWhere('nik', 'like', "%{$this->search}%")
+                    ->orWhere('phone_number', 'like', "%{$this->search}%");
             })
-            ->latest()->paginate(10);
+            ->orWhere('kode_unik_kupon', 'like', "%{$this->search}%")
+            ->latest()
+            ->paginate($this->perPage);
 
         // FILTER WARGA: Hanya ambil warga yang BELUM ADA di tabel mustahiqs
         $wargaSudahDapat = Mustahiq::pluck('id_warga')->toArray();

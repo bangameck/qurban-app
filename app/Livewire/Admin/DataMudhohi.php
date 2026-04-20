@@ -24,6 +24,7 @@ class DataMudhohi extends Component
     use WithFileUploads, WithPagination;
 
     public $search = '';
+    public $perPage = 12;
 
     public $isModalOpen = false;
 
@@ -61,6 +62,17 @@ class DataMudhohi extends Component
         return view('components.skeleton._mudhohi');
     }
 
+    public function updatingSearch()
+    {
+        $this->perPage = 12;
+        $this->resetPage();
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += 12;
+    }
+
     public function messages()
     {
         return [
@@ -77,8 +89,15 @@ class DataMudhohi extends Component
     {
         $this->resetForm();
         if ($id) {
-            $this->editId = $id;
             $mudhohi = Mudhohi::find($id);
+            
+            // Proteksi: Jika sudah diambil, tidak boleh edit
+            if ($mudhohi && $mudhohi->status_pengambilan == 'Sudah') {
+                $this->dispatch('notify-error', 'Maaf, data yang sudah diambil tidak dapat diubah!');
+                return;
+            }
+
+            $this->editId = $id;
             $this->id_warga = $mudhohi->id_warga;
             $this->id_kelompok_sapi = $mudhohi->id_kelompok_sapi;
             $this->tipe_qurban = $mudhohi->tipe_qurban;
@@ -192,6 +211,13 @@ class DataMudhohi extends Component
     {
         $mudhohi = Mudhohi::find($this->deleteId);
         if ($mudhohi) {
+            // Proteksi: Jika sudah diambil, tidak boleh hapus
+            if ($mudhohi->status_pengambilan == 'Sudah') {
+                $this->dispatch('notify-error', 'Gagal! Data yang sudah diambil tidak boleh dihapus.');
+                $this->isDeleteModalOpen = false;
+                return;
+            }
+
             // Hapus Bukti & QR Code dari Storage
             if ($mudhohi->path_bukti_pendaftaran && Storage::disk('public')->exists($mudhohi->path_bukti_pendaftaran)) {
                 Storage::disk('public')->delete($mudhohi->path_bukti_pendaftaran);
@@ -209,17 +235,19 @@ class DataMudhohi extends Component
 
     public function render()
     {
-        $mudhohis = Mudhohi::with(['warga', 'kelompokSapi.sapi', 'panitia'])
+        usleep(200000);
+        $mudhohis = Mudhohi::with(['warga.rt.rw', 'kelompokSapi.sapi', 'panitia'])
             ->where('tahun', $this->tahun_aktif)
             ->where(function ($q) {
                 $q->whereHas('warga', function ($sq) {
                     $sq->where('nama', 'like', '%'.$this->search.'%')
-                        ->orWhere('nik', 'like', '%'.$this->search.'%');
+                        ->orWhere('nik', 'like', '%'.$this->search.'%')
+                        ->orWhere('phone_number', 'like', '%'.$this->search.'%');
                 })
                     ->orWhere('kode_unik_kupon', 'like', '%'.$this->search.'%');
             })
             ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->paginate($this->perPage);
 
         $wargas = Warga::whereNotIn('id', function ($query) {
             $query->select('id_warga')

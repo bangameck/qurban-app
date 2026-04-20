@@ -43,7 +43,7 @@ class ManajemenUser extends Component
 
     public function placeholder()
     {
-        return view('components.skeleton._sesi');
+        return view('components.skeleton._user');
     }
 
     public function messages()
@@ -181,6 +181,7 @@ class ManajemenUser extends Component
 
     public function render()
     {
+        usleep(200000);
         $users = User::with(['warga', 'roles'])
             ->where(function ($q) {
                 $q->where('name', 'like', '%'.$this->search.'%')

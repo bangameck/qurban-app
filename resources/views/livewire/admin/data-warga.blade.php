@@ -22,73 +22,132 @@
         </div>
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative z-0">
-        <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-            <div class="relative w-full md:w-72">
-                <input wire:model.live.debounce.300ms="search" type="text" class="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition" placeholder="Cari NIK atau Nama...">
-                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+    <div class="mb-10 relative max-w-md">
+        <div class="relative group">
+            <input wire:model.live.debounce.300ms="search" type="text" id="floating_search"
+                class="block px-12 py-5 w-full text-sm font-black text-gray-900 bg-white rounded-[2rem] border-2 border-gray-100 appearance-none focus:outline-none focus:ring-4 focus:ring-primary-500/10 focus:border-primary-600 peer shadow-sm transition-all" 
+                placeholder=" " />
+            <label for="floating_search" 
+                class="absolute text-sm font-bold text-gray-400 bg-white px-2 duration-300 transform -translate-y-1/2 scale-75 top-0 z-10 origin-[0] left-11 peer-focus:text-primary-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-5 peer-placeholder-shown:top-0 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75 cursor-text">
+                Cari Nama, NIK, atau No. HP...
+            </label>
+            <div class="absolute left-4 top-1/2 -translate-y-1/2 p-1.5 bg-primary-50 text-primary-600 rounded-xl group-focus-within:bg-primary-600 group-focus-within:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
         </div>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm text-gray-600">
-                <thead class="bg-gray-50 text-gray-700 font-bold uppercase text-xs tracking-wider border-b border-gray-100">
-                    <tr>
-                        <th class="px-6 py-4">Profil</th>
-                        <th class="px-6 py-4">No. KK / NIK</th>
-                        <th class="px-6 py-4">Nama Lengkap</th>
-                        <th class="px-6 py-4">Jabatan</th>
-                        <th class="px-6 py-4 text-right">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-50">
-                    @forelse ($wargas as $warga)
-                        <tr class="hover:bg-primary-50/30 transition">
-                            <td class="px-6 py-3">
-                                @php
-                                    $imgUrl = $warga->path_img ? asset('storage/'.$warga->path_img).'?v='.time() : 'https://ui-avatars.com/api/?name='.urlencode($warga->nama).'&background=random&color=fff&bold=true';
-                                @endphp
-                                <img src="{{ $imgUrl }}" class="w-10 h-10 rounded-full object-cover shadow-sm border border-gray-200">
-                            </td>
-                            <td class="px-6 py-3">
-                                <div class="font-medium text-gray-800">{{ $warga->nik }}</div>
-                                @if($warga->no_kk) <div class="text-xs text-gray-400">KK: {{ $warga->no_kk }}</div> @endif
-                            </td>
-                            <td class="px-6 py-3 font-semibold text-primary-700">{{ $warga->nama }}</td>
-                            <td class="px-6 py-3">
-                                <span class="px-3 py-1 rounded-lg text-xs font-bold 
-                                    {{ in_array($warga->jabatan_sosial, ['RT', 'RW', 'Tokoh', 'Panitia', 'Admin', 'Super_Admin']) ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600' }}">
-                                    {{ $warga->jabatan_sosial }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-3 text-right">
-                                <div class="flex justify-end gap-2">
-                                    <button wire:click="openModal({{ $warga->id }})" class="p-2 text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-600 hover:text-white transition" title="Edit">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                                    </button>
-                                    <button wire:click="confirmDelete({{ $warga->id }})" class="p-2 text-red-600 bg-red-50 rounded-lg hover:bg-red-600 hover:text-white transition" title="Hapus">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-8 text-center text-gray-500">
-                                <div class="flex flex-col items-center justify-center">
-                                    <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-                                    Belum ada data warga ditemukan.
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-        <div class="p-4 border-t border-gray-100 bg-gray-50">
-            {{ $wargas->links() }}
-        </div>
     </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+        @forelse ($wargas as $warga)
+            <div class="group bg-white rounded-[2.5rem] p-6 shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-primary-900/5 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden flex flex-col h-full">
+                <div class="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity flex gap-2 z-10">
+                    <button wire:click="openModal({{ $warga->id }})" class="p-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition shadow-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                    </button>
+                    <button wire:click="confirmDelete({{ $warga->id }})" class="p-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition shadow-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                </div>
+
+                <div class="flex flex-col items-center mb-6">
+                    @php
+                        $imgUrl = $warga->path_img ? asset('storage/'.$warga->path_img).'?v='.time() : 'https://ui-avatars.com/api/?name='.urlencode($warga->nama).'&background=random&color=fff&bold=true';
+                    @endphp
+                    <div class="relative mb-4">
+                        <img src="{{ $imgUrl }}" class="w-24 h-24 rounded-full object-cover shadow-md border-4 border-white ring-4 ring-primary-50 transition group-hover:scale-105 duration-500">
+                        <span class="absolute bottom-1 right-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-tighter border-2 border-white
+                            {{ in_array($warga->jabatan_sosial, ['RT', 'RW', 'Tokoh', 'Panitia', 'Admin', 'Super_Admin']) ? 'bg-amber-400 text-amber-900' : 'bg-gray-400 text-white' }}">
+                            {{ $warga->jabatan_sosial }}
+                        </span>
+                    </div>
+                    <h3 class="text-lg font-black text-gray-900 text-center leading-tight group-hover:text-primary-700 transition-colors">{{ $warga->nama }}</h3>
+                    <div class="mt-2 flex flex-col items-center gap-1.5">
+                        <div class="px-3 py-1 bg-gray-50 rounded-full border border-gray-200">
+                            <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest">NIK: {{ $warga->nik ?? '-' }}</p>
+                        </div>
+                        @if($warga->no_kk)
+                            <div class="px-3 py-1 bg-primary-50 rounded-full border border-primary-100">
+                                <p class="text-[9px] font-black text-primary-600 uppercase tracking-widest">KK: {{ $warga->no_kk }}</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="space-y-4 flex-1">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 flex flex-col items-center">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">RT</span>
+                            <span class="text-sm font-black text-gray-800">{{ $warga->rt->nama_rt ?? '-' }}</span>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100 flex flex-col items-center">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">RW</span>
+                            <span class="text-sm font-black text-gray-800">{{ $warga->rt->rw->nama_rw ?? '-' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-primary-50/50 p-4 rounded-2xl border border-primary-100/50">
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="mt-1 p-1 bg-white text-primary-600 rounded-lg shadow-sm">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <div class="flex-1">
+                                <span class="text-[10px] font-black text-primary-400 uppercase tracking-widest block mb-0.5">Alamat Lengkap</span>
+                                <p class="text-[11px] font-bold text-gray-700 leading-relaxed">{{ $warga->alamat }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 gap-2 pt-2 border-t border-primary-100/50">
+                            <div class="flex justify-between items-center">
+                                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Kelurahan</span>
+                                <span class="text-[10px] font-black text-gray-800">{{ $warga->rt->rw->kelurahan ?? '-' }}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Kecamatan</span>
+                                <span class="text-[10px] font-black text-gray-800">{{ $warga->rt->rw->kecamatan ?? '-' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @if($warga->phone_number)
+                    <div class="mt-6 flex items-center gap-3">
+                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $warga->phone_number) }}" target="_blank" class="flex-1 py-3 px-4 bg-emerald-50 text-emerald-700 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-600 hover:text-white transition-all shadow-sm flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217s.231.001.332.005c.109.004.258-.041.404.314.145.356.491 1.197.535 1.285.044.088.072.19.014.307s-.088.134-.175.235c-.087.101-.183.225-.261.303-.093.093-.19.194-.081.381.109.187.485.802 1.039 1.296.714.637 1.316.833 1.503.927.187.094.297.078.406-.047.109-.125.462-.535.586-.717.124-.182.248-.153.419-.089s1.085.512 1.273.6c.188.089.312.134.358.21.046.076.046.438-.098.843z"/></svg>
+                            {{ $warga->phone_number }}
+                        </a>
+                    </div>
+                @endif
+            </div>
+        @empty
+            <div class="col-span-full py-20 bg-white rounded-[3rem] border-2 border-dashed border-gray-100 flex flex-col items-center justify-center text-center">
+                <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                </div>
+                <h3 class="text-xl font-black text-gray-800">Tidak ada data warga</h3>
+                <p class="text-gray-400 font-bold mt-1 uppercase tracking-widest text-xs">Coba cari dengan kata kunci lain wak!</p>
+            </div>
+        @endforelse
+    </div>
+
+    @if ($wargas->hasMorePages())
+        <div class="flex justify-center pb-10">
+            <button wire:click="loadMore" wire:loading.attr="disabled" class="group relative px-12 py-4 bg-white border-2 border-primary-100 text-primary-700 font-black rounded-2xl shadow-sm hover:bg-primary-600 hover:text-white hover:border-primary-600 transition-all duration-300 flex items-center gap-3 active:scale-95">
+                <span wire:loading.remove wire:target="loadMore">LOAD MORE DATA</span>
+                <span wire:loading wire:target="loadMore" class="flex items-center gap-3">
+                    <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    LOADING...
+                </span>
+                <svg wire:loading.remove wire:target="loadMore" class="w-5 h-5 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+        </div>
+    @endif
+
+    @if ($wargas->total() > 0 && !$wargas->hasMorePages())
+        <div class="text-center pb-10">
+            <span class="px-6 py-2 bg-gray-100 text-gray-400 font-black text-[10px] uppercase tracking-[0.2em] rounded-full">SEMUA DATA TELAH DITAMPILKAN</span>
+        </div>
+    @endif
+
 
     <div x-show="$wire.isModalOpen" style="display: none;" class="relative z-[100]" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div x-show="$wire.isModalOpen" x-transition.opacity class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity"></div>

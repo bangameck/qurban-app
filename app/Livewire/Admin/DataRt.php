@@ -35,7 +35,7 @@ class DataRt extends Component
 
     public function placeholder()
     {
-        return view('components.skeleton._rt_rw'); // Pakai skeleton yang sama dengan RW biar hemat
+        return view('components.skeleton._rt_rw');
     }
 
     public function updatingSearch()
@@ -137,6 +137,7 @@ class DataRt extends Component
 
     public function render()
     {
+        usleep(200000);
         $rts = Rt::with(['rw', 'pejabat'])
             ->where('nama_rt', 'like', '%'.$this->search.'%')
             ->orWhereHas('rw', function ($q) {

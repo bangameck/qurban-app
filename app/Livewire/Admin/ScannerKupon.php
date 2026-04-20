@@ -9,11 +9,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
 #[Layout('components.layouts.app')]
+#[Lazy]
 class ScannerKupon extends Component
 {
+    public function placeholder()
+    {
+        return view('components.skeleton._scanner');
+    }
+
     public $scannedCode = '';
 
     public $result = null; // Menyimpan data yang ditemukan
@@ -103,6 +110,7 @@ class ScannerKupon extends Component
 
     public function render()
     {
+        usleep(200000);
         return view('livewire.admin.scanner-kupon')
             ->title('Scanner Kupon Cerdas');
     }

@@ -222,6 +222,7 @@ class DataSapi extends Component
 
     public function render()
     {
+        usleep(200000);
         // Filter tabel pakai Tahun Aktif
         $sapis = Sapi::withCount('kelompok')
             ->where('tahun', $this->tahun_aktif)

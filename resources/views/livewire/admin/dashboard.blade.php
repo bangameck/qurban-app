@@ -1,32 +1,53 @@
 <div>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-    <div class="relative rounded-[2.5rem] p-8 sm:p-10 mb-8 shadow-xl overflow-hidden flex items-center justify-between"
-        style="background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-800) 100%);">
+    <div
+        class="relative rounded-[2.5rem] p-8 sm:p-10 mb-8 shadow-xl overflow-hidden flex items-center justify-between group">
 
-        <div class="absolute inset-0 opacity-10"
+        @if(!empty($globalSettings['banner_image']) &&
+        file_exists(public_path('storage/'.$globalSettings['banner_image'])))
+        <div class="absolute inset-0 z-0">
+            <img src="{{ asset('storage/'.$globalSettings['banner_image']) }}?v={{ time() }}"
+                class="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
+                alt="Banner">
+        </div>
+        @endif
+
+        <div class="absolute inset-0 z-0 opacity-75"
+            style="background: linear-gradient(135deg, var(--color-primary-700) 0%, var(--color-primary-900) 100%);">
+        </div>
+
+        <div class="absolute inset-0 opacity-10 z-0"
             style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;">
         </div>
 
         <div class="relative z-10 text-white w-full md:w-2/3">
             <div
-                class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-[10px] font-black uppercase tracking-widest mb-4 border border-white/20">
-                <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-[10px] font-black uppercase tracking-widest mb-4 border border-white/20 shadow-sm">
+                <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></div>
                 Sistem Qurban {{ $tahun_aktif }} Online
             </div>
 
-            <h2 class="text-3xl md:text-5xl font-black mb-3 leading-tight">{{ $greeting }},<br>{{ $nama_admin }}! 👋
+            <h2 class="text-3xl md:text-5xl font-black mb-3 leading-tight drop-shadow-md">
+                {{ $greeting }},<br>{{ $nama_admin }}! 👋
             </h2>
-            <p class="text-primary-100 text-lg md:text-xl font-medium leading-relaxed mb-8">Pantau data pendaftar dan progres
-                distribusi daging warga secara real-time dari satu tempat.</p>
+            <p class="text-primary-50 text-lg md:text-xl font-medium leading-relaxed mb-8 drop-shadow-sm">
+                Pantau data pendaftar dan progres distribusi daging warga secara real-time dari satu tempat.
+            </p>
 
-            <a wire:navigate href="{{ route('admin.scanner') }}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white text-primary-800 font-black rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:bg-gray-50 hover:-translate-y-1 transition-all uppercase tracking-widest text-sm border-2 border-white/50 ring-4 ring-primary-500/20 active:scale-95">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+            <a wire:navigate href="{{ route('admin.scanner') }}"
+                class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white text-primary-800 font-black rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.15)] hover:bg-gray-50 hover:-translate-y-1 transition-all uppercase tracking-widest text-sm border-2 border-white/50 ring-4 ring-primary-500/20 active:scale-95">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z">
+                    </path>
+                </svg>
                 Buka Scanner Kupon
             </a>
         </div>
 
-        <div class="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2 opacity-20 pointer-events-none">
+        <div
+            class="hidden md:block absolute right-0 top-1/2 transform -translate-y-1/2 opacity-20 pointer-events-none z-10 mix-blend-overlay">
             <svg class="w-80 h-80 text-white transform translate-x-16" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"

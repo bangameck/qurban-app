@@ -24,11 +24,12 @@ class LaporanPanitia extends Component
 
     public function placeholder()
     {
-        return view('components.skeleton._default');
+        return view('components.skeleton._laporan');
     }
 
     public function render()
     {
+        usleep(200000);
         // Urutan Jabatan sesuai request wak
         $order = [
             'Penanggung Jawab Qurban', 'Ketua Qurban', 'Koordinator',
