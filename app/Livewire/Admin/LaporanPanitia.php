@@ -7,10 +7,12 @@ use App\Models\KelompokSapi;
 use App\Models\Panitia;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Laporan & Cetak Kupon Panitia')]
 class LaporanPanitia extends Component
 {
     public $search = '';

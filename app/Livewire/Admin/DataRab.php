@@ -6,10 +6,12 @@ use App\Models\AppSetting;
 use App\Models\Rab;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Rencana Anggaran Belanja (RAB)')]
 class DataRab extends Component
 {
     public $tahun_aktif;

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -19,11 +20,13 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Data Peserta (Mudhohi)')]
 class DataMudhohi extends Component
 {
     use WithFileUploads, WithPagination;
 
     public $search = '';
+
     public $perPage = 12;
 
     public $isModalOpen = false;
@@ -90,10 +93,11 @@ class DataMudhohi extends Component
         $this->resetForm();
         if ($id) {
             $mudhohi = Mudhohi::find($id);
-            
+
             // Proteksi: Jika sudah diambil, tidak boleh edit
             if ($mudhohi && $mudhohi->status_pengambilan == 'Sudah') {
                 $this->dispatch('notify-error', 'Maaf, data yang sudah diambil tidak dapat diubah!');
+
                 return;
             }
 
@@ -215,6 +219,7 @@ class DataMudhohi extends Component
             if ($mudhohi->status_pengambilan == 'Sudah') {
                 $this->dispatch('notify-error', 'Gagal! Data yang sudah diambil tidak boleh dihapus.');
                 $this->isDeleteModalOpen = false;
+
                 return;
             }
 

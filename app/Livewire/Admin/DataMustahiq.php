@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Data Penerima (Mustahiq)')]
 class DataMustahiq extends Component
 {
     use WithPagination;

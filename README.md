@@ -14,31 +14,37 @@ Dibangun dengan antarmuka **Premium Glassmorphism** yang interaktif, aplikasi in
 ## ✨ Fitur Unggulan
 
 ### 📊 1. Dashboard Monitoring Real-Time
+
 - Visualisasi data pendaftar Qurban (Sapi & Kambing).
 - Progres penyembelihan dan distribusi daging secara langsung.
 - **Dynamic Greeting:** Menyapa admin berdasarkan waktu (Pagi/Siang/Sore).
 - **Banner Background:** Dashboard yang bisa di-custom tampilannya langsung dari pengaturan.
 
 ### 🔍 2. Smart Scanner Kupon (QR Code)
+
 - Verifikasi pengambilan daging menggunakan kamera HP/Laptop secara instan.
 - **Multi-Role Detection:** Otomatis mendeteksi apakah pemegang kupon adalah Mudhohi, Mustahiq, atau Panitia.
 - Validasi status pengambilan untuk mencegah pengambilan ganda.
 
 ### 🐂 3. Manajemen Hewan & Kelompok Qurban
+
 - Pengaturan kelompok sapi (7 orang per kelompok) secara otomatis atau manual.
 - Data detail hewan qurban dilengkapi dengan foto progress penyembelihan.
 - Cetak Sertifikat Qurban otomatis dengan tanda tangan pejabat terkait.
 
 ### 🖼️ 4. Pengaturan Tampilan & Banner (Smart Image Handling)
-- **Auto-Compression:** Upload Logo dan Banner otomatis dikompres di sisi client menggunakan *Canvas API* hingga di bawah 100KB untuk menghemat storage.
+
+- **Auto-Compression:** Upload Logo dan Banner otomatis dikompres di sisi client menggunakan _Canvas API_ hingga di bawah 100KB untuk menghemat storage.
 - **Auto-Crop Banner:** Fitur pemotongan gambar otomatis (Center Crop) agar banner selalu tampil proporsional di layar Login dan Dashboard.
 - **Theme Color Sync:** Warna tema aplikasi (Emerald, Blue, Rose, Amber) dapat diubah secara instan melalui panel admin.
 
 ### 📱 5. Integrasi WhatsApp (WA Gateway)
+
 - Notifikasi otomatis kepada Mudhohi saat hewan sudah disembelih.
 - Pengiriman informasi pengambilan daging melalui integrasi **Fonnte**.
 
 ### 🦴 6. Manajemen Distribusi & Sesi
+
 - Pengaturan sesi pengambilan daging untuk mengurai antrian warga.
 - Data warga (RT/RW) terintegrasi untuk akurasi sasaran penerima daging (Mustahiq).
 
@@ -46,8 +52,8 @@ Dibangun dengan antarmuka **Premium Glassmorphism** yang interaktif, aplikasi in
 
 ## 🛠️ Stack Teknologi
 
-- **Framework Backend:** Laravel 11+
-- **Frontend Stack:** Livewire 3 (Full-page components), Alpine.js (Client-side compression & interactions)
+- **Framework Backend:** Laravel 13
+- **Frontend Stack:** Livewire 4 (Full-page components), Alpine.js (Client-side compression & interactions)
 - **Styling:** Tailwind CSS (Custom Color Palettes, Glassmorphism UI)
 - **Database:** MySQL
 
@@ -56,39 +62,44 @@ Dibangun dengan antarmuka **Premium Glassmorphism** yang interaktif, aplikasi in
 ## 🚀 Panduan Instalasi
 
 1. **Clone Repository**
-   ```bash
-   git clone https://github.com/bangameck/qurban-app-radevanka.git
-   cd qurban-app-radevanka
-   ```
+
+    ```bash
+    git clone https://github.com/bangameck/qurban-app.git
+    cd qurban-app
+    ```
 
 2. **Install Dependency**
-   ```bash
-   composer install
-   npm install
-   npm run build
-   ```
+
+    ```bash
+    composer install
+    npm install
+    npm run build
+    ```
 
 3. **Konfigurasi Environment**
    Salin file `.env.example` menjadi `.env` lalu sesuaikan konfigurasi database Anda.
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
+
+    ```bash
+    cp .env.example .env
+    php artisan key:generate
+    ```
 
 4. **Migrasi Database & Seeder**
-   ```bash
-   php artisan migrate --seed
-   ```
+
+    ```bash
+    php artisan migrate --seed
+    ```
 
 5. **Link Storage (Penting)**
-   ```bash
-   php artisan storage:link
-   ```
+
+    ```bash
+    php artisan storage:link
+    ```
 
 6. **Jalankan Aplikasi**
-   ```bash
-   php artisan serve
-   ```
+    ```bash
+    php artisan serve
+    ```
 
 ---
 
@@ -100,9 +111,10 @@ Dibangun dengan antarmuka **Premium Glassmorphism** yang interaktif, aplikasi in
 
 - 🧑‍💻 **Developer:** [@bangameck](https://instagram.com/bangameck)
 - 📍 **Lokasi:** Pekanbaru, Riau, Indonesia 🇮🇩
-- 🎯 **Visi:** *Memudahkan umat dalam ibadah melalui teknologi.*
+- 🎯 **Visi:** _Memudahkan umat dalam ibadah melalui teknologi._
 
 ---
 
 ## 📄 Lisensi
+
 Hak Cipta &copy; 2026 **Qurban App Radevanka**. Seluruh hak cipta dilindungi.

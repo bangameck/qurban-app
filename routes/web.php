@@ -27,6 +27,7 @@ use App\Livewire\Display\LiveScreen;
 use App\Livewire\Public\DetailKupon;
 use App\Livewire\Public\DetailMudhohi;
 use App\Livewire\Public\Home;
+use App\Livewire\Public\MudhohiList;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,7 @@ Route::get('/login', Login::class)->name('login')->middleware('guest');
 Route::get('/kupon/{kode}', DetailKupon::class)->name('kupon.detail');
 Route::get('/pendaftar/{id}', DetailMudhohi::class)->name('mudhohi.detail');
 Route::get('/sertifikat/{id}/pdf', [SertifikatController::class, 'cetak'])->name('mudhohi.sertifikat');
+Route::get('/peserta-qurban', MudhohiList::class)->name('public.mudhohi');
 
 // Route khusus Admin (Harus login dulu)
 Route::middleware('auth')->group(function () {

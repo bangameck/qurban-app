@@ -1,4 +1,3 @@
-@props(['title' => 'Dashboard'])
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -49,7 +48,7 @@
         @include('components.layouts.sidebar')
 
         <div class="flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 relative z-0">
-            @include('components.layouts.topbar')
+           @include('components.layouts.topbar', ['title' => $title ?? 'Dashboard'])
             @livewire('admin.profile-setting')
 
             <main class="flex-1 flex flex-col overflow-x-hidden overflow-y-auto">

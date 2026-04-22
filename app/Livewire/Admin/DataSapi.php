@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Data Sapi')]
 class DataSapi extends Component
 {
     use WithFileUploads, WithPagination;

@@ -10,17 +10,20 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Data Panitia')]
 class DataPanitia extends Component
 {
     use WithPagination;
 
     public $search = '';
+
     public $perPage = 12;
 
     public $isModalOpen = false;
@@ -73,10 +76,11 @@ class DataPanitia extends Component
         $this->resetForm();
         if ($id) {
             $data = Panitia::find($id);
-            
+
             // Proteksi: Jika sudah diambil, tidak boleh edit
             if ($data && $data->status_pengambilan == 'Sudah') {
                 $this->dispatch('notify-error', 'Maaf, data yang sudah mengambil jatah tidak dapat diubah!');
+
                 return;
             }
 
@@ -142,6 +146,7 @@ class DataPanitia extends Component
             if ($data->status_pengambilan == 'Sudah') {
                 $this->dispatch('notify-error', 'Gagal! Data panitia yang sudah mengambil jatah tidak boleh dihapus.');
                 $this->isDeleteModalOpen = false;
+
                 return;
             }
 
@@ -157,7 +162,7 @@ class DataPanitia extends Component
     public function openListModal($id_kelompok)
     {
         $this->selectedKelompok = KelompokSapi::find($id_kelompok);
-        
+
         $allPanitia = Panitia::with('warga')
             ->where('id_kelompok_sapi', $id_kelompok)
             ->where('tahun', $this->tahun_aktif)
@@ -166,7 +171,7 @@ class DataPanitia extends Component
         // Pisahkan Ketua dan Anggota
         $this->panitiaKelompok = [
             'ketua' => $allPanitia->where('jabatan', 'Ketua Kelompok Qurban'),
-            'anggota' => $allPanitia->where('jabatan', 'Anggota Kelompok Qurban')
+            'anggota' => $allPanitia->where('jabatan', 'Anggota Kelompok Qurban'),
         ];
 
         $this->isListModalOpen = true;

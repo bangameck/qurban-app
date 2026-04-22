@@ -8,12 +8,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Spatie\Permission\Models\Role;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Manajemen User')]
 class ManajemenUser extends Component
 {
     use WithPagination;
@@ -100,21 +102,21 @@ class ManajemenUser extends Component
     {
         $rules = [
             'id_warga' => 'required|exists:wargas,id|unique:users,id_warga,'.($this->editId ?? 'NULL'),
-            'email'    => 'required|email|unique:users,email,'.($this->editId ?? 'NULL'),
-            'status'   => 'boolean',
+            'email' => 'required|email|unique:users,email,'.($this->editId ?? 'NULL'),
+            'status' => 'boolean',
         ];
 
         $this->validate($rules);
 
         $data = [
             'id_warga' => $this->id_warga,
-            'email'    => $this->email,
-            'status'   => $this->status,
+            'email' => $this->email,
+            'status' => $this->status,
         ];
 
         if (! $this->editId) {
             $warga = Warga::find($this->id_warga);
-            $data['name']     = $warga->nama;
+            $data['name'] = $warga->nama;
             $data['password'] = Hash::make('password123');
         }
 
@@ -201,9 +203,9 @@ class ManajemenUser extends Component
         $roles = Role::orderBy('name')->get();
 
         return view('livewire.admin.manajemen-user', [
-            'users'  => $users,
+            'users' => $users,
             'wargas' => $wargas,
-            'roles'  => $roles,
+            'roles' => $roles,
         ])->title('Manajemen User');
     }
 }

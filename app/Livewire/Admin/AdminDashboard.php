@@ -11,10 +11,12 @@ use App\Models\SesiDistribusi;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Dashboard')]
 class AdminDashboard extends Component
 {
     public $tahun_aktif;

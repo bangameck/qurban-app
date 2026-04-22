@@ -7,11 +7,13 @@ use App\Models\Rw;
 use App\Models\Warga;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Data RT')]
 class DataRt extends Component
 {
     use WithPagination;

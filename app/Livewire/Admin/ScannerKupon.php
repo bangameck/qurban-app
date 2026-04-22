@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Scanner Kupon Cerdas')]
 class ScannerKupon extends Component
 {
     public function placeholder()
@@ -111,6 +113,7 @@ class ScannerKupon extends Component
     public function render()
     {
         usleep(200000);
+
         return view('livewire.admin.scanner-kupon')
             ->title('Scanner Kupon Cerdas');
     }

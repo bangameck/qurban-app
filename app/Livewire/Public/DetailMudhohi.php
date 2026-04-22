@@ -25,13 +25,13 @@ class DetailMudhohi extends Component
 
     public function mount($id)
     {
-        // Cari data mudhohi beserta relasi lengkapnya
+        // Cari data mudhohi beserta relasi lengkapnya (Warga, Kelompok Sapi, dan Sapi)
         $this->mudhohi = Mudhohi::with([
             'warga',
             'kelompokSapi.sapi',
         ])->findOrFail($id);
 
-        // Ambil pengaturan aplikasi untuk nama & warna tema fallback (jika diperlukan)
+        // Ambil pengaturan aplikasi untuk nama & warna tema
         $settings = AppSetting::pluck('value', 'key')->toArray();
         $this->appName = $settings['app_name'] ?? 'Panitia Qurban';
         $this->themeColor = $settings['theme_color'] ?? 'emerald';
@@ -39,7 +39,9 @@ class DetailMudhohi extends Component
 
     public function render()
     {
-        usleep(200000);
-        return view('livewire.public.detail-mudhohi')->title('Tanda Terima Qurban - '.$this->mudhohi->warga->nama);
+        usleep(200000); // Simulasi efek loading skeleton
+
+        return view('livewire.public.detail-mudhohi')
+            ->title('Tanda Terima Qurban - '.$this->mudhohi->warga->nama);
     }
 }

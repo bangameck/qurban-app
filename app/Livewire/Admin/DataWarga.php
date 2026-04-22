@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -17,12 +18,14 @@ use Maatwebsite\Excel\Validators\ValidationException;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Data Warga')]
 class DataWarga extends Component
 {
     use WithFileUploads;
     use WithPagination;
 
     public $search = '';
+
     public $perPage = 12;
 
     public $isModalOpen = false;
@@ -250,10 +253,10 @@ class DataWarga extends Component
         $listRt = Rt::all();
 
         $wargas = Warga::with(['rt.rw'])
-            ->where(function($q) {
+            ->where(function ($q) {
                 $q->where('nama', 'like', '%'.$this->search.'%')
-                  ->orWhere('nik', 'like', '%'.$this->search.'%')
-                  ->orWhere('phone_number', 'like', '%'.$this->search.'%');
+                    ->orWhere('nik', 'like', '%'.$this->search.'%')
+                    ->orWhere('phone_number', 'like', '%'.$this->search.'%');
             })
             ->orderBy('id', 'desc')
             ->paginate($this->perPage);

@@ -17,7 +17,7 @@ class Home extends Component
 {
     public function placeholder()
     {
-        return view('components.skeleton._home');
+        return view('components.skeleton.public._home');
     }
 
     public $tahun_aktif;
@@ -55,7 +55,8 @@ class Home extends Component
 
     public function render()
     {
-        usleep(200000);
+        usleep(300000);
+
         return view('livewire.public.home')->title('Beranda Publik');
     }
 }

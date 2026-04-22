@@ -7,11 +7,13 @@ use App\Models\KelompokSapi;
 use App\Models\Sapi;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Data Kelompok Sapi')]
 class DataKelompokSapi extends Component
 {
     use WithPagination;

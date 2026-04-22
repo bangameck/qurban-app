@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 #[Layout('components.layouts.app')]
 #[Lazy]
+#[Title('Pengaturan Aplikasi')]
 class AppSetting extends Component
 {
     use WithFileUploads;
